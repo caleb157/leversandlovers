@@ -97,7 +97,9 @@ export default function Page() {
             placeholder="Customers will pay because…"
           />
           <div className="nav">
-            <span />
+            <a className="btn ghost" href="/board">
+              Skip the quiz — browse all the levers
+            </a>
             <button className="btn" onClick={() => setStep(1)}>
               Begin the levers →
             </button>
@@ -119,7 +121,6 @@ export default function Page() {
           {catLevers.map((l) => (
             <div className="q" key={l.id}>
               <p className="qtext">{l.question}</p>
-              {l.note && <p className="note">{l.note}</p>}
               <p className="wt">
                 Weight {l.weight}
                 {l.tier === "multiplier" ? " · capacity multiplier" : ""}
@@ -186,16 +187,6 @@ export default function Page() {
               ))}
             </div>
 
-            <div className="spectrum">
-              <div className="bar">
-                <div className="marker" style={{ left: `${result.spectrum}%` }} />
-              </div>
-              <div className="ends">
-                <span>Traveling on business</span>
-                <span>Traveling on mission</span>
-              </div>
-            </div>
-
             {result.flags.length > 0 && (
               <div className="flags">
                 <p className="small">Levers currently running hot:</p>
@@ -214,6 +205,15 @@ export default function Page() {
                 disabled={loading}
               >
                 {loading ? "Analyzing…" : "Run strategy synthesis"}
+              </button>
+              <button
+                className="btn"
+                onClick={() => {
+                  localStorage.setItem("b4t-answers", JSON.stringify(answers));
+                  window.location.href = "/board";
+                }}
+              >
+                Explore your levers →
               </button>
             </div>
           </section>

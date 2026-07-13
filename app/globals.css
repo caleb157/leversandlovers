@@ -137,6 +137,111 @@ label.lbl {
 .synth { white-space: pre-wrap; font-size: 15.5px; }
 .small { font-size: 13.5px; color: #5a5648; font-style: italic; }
 
+/* ─── Lever Board ─── */
+.board-strip {
+  position: sticky; top: 8px; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 18px; flex-wrap: wrap; padding: 16px 22px;
+  box-shadow: 0 4px 14px rgba(28, 36, 32, 0.14);
+}
+.strip-main { display: flex; align-items: center; gap: 16px; min-width: 240px; flex: 1; }
+.strip-verdict { font-family: "Jost"; line-height: 1; white-space: nowrap; }
+.strip-num { font-size: 46px; font-weight: 700; color: var(--panel); }
+.strip-of { font-size: 18px; color: var(--brass); font-weight: 500; }
+.strip-intensity { font-weight: 600; font-size: 16px; color: var(--panel); }
+.strip-breakdown { font-weight: 400; color: var(--brass); font-size: 14px; }
+.strip-label { font-size: 13px; font-style: italic; color: #5a5648; margin-top: 2px; }
+.strip-gauges { margin: 0; gap: 4px; }
+.strip-gauges .gauge { width: 58px; }
+.strip-gauges .gauge .track { height: 64px; width: 10px; }
+.strip-gauges .gauge .pct { font-size: 12px; margin-top: 4px; }
+.strip-gauges .gauge .name { font-size: 9px; }
+
+.board-actions { display: flex; justify-content: space-between; gap: 10px; margin: 14px 0 18px; }
+a.btn { text-decoration: none; display: inline-block; }
+
+/* rows */
+.lrow { border: 1px solid var(--line); border-radius: 4px; margin-bottom: 8px; background: #fffdf6; }
+.lrow.open { border-color: var(--brass); }
+.lrow-head {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  font-family: "Jost", sans-serif; font-size: 15px; text-align: left;
+  background: transparent; border: 0; padding: 12px 14px; cursor: pointer; color: var(--ink);
+}
+.lrow-head:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.lrow-name { font-weight: 600; flex: 1; }
+.lrow-wt {
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--brass); white-space: nowrap;
+}
+.lrow-val {
+  font-weight: 700; font-size: 17px; color: var(--panel);
+  min-width: 26px; text-align: right;
+}
+.lrow-val.hot, .lever-val.hot { color: var(--signal); }
+.lrow-caret { color: var(--brass); font-size: 18px; width: 16px; text-align: center; }
+
+.chip { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.chip-environmental { background: var(--panel); }
+.chip-personal { background: var(--brass); }
+.chip-business { background: var(--brass-soft); border: 1px solid var(--brass); }
+.chip-transformational { background: var(--signal); }
+
+.lrow-body { padding: 4px 16px 18px; border-top: 1px dashed var(--line); }
+.lrow-desc { font-size: 14.5px; margin: 12px 0 14px; }
+.lrow-grid { display: flex; gap: 22px; align-items: stretch; }
+.lrow-pros { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; align-items: start; }
+.lrow-pros h4 {
+  font-family: "Jost"; font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--panel); margin-bottom: 4px;
+}
+.lrow-pros h4 + ul { margin-bottom: 10px; }
+.lrow-pros ul { list-style: none; }
+.lrow-pros li {
+  font-size: 13.5px; padding-left: 14px; position: relative; margin-bottom: 5px;
+}
+.lrow-pros li::before { content: "—"; position: absolute; left: 0; color: var(--brass); }
+@media (max-width: 640px) {
+  .lrow-grid { flex-direction: column; }
+  .lrow-pros { grid-template-columns: 1fr; }
+}
+
+/* the lever control */
+.lever-ctl { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 4px 10px; }
+.lever-track {
+  position: relative; width: 46px; height: 210px; cursor: pointer;
+  touch-action: none; user-select: none; border-radius: 6px;
+}
+.lever-track:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+.lever-slot {
+  position: absolute; left: 50%; top: 6px; bottom: 6px; width: 8px;
+  transform: translateX(-50%);
+  background: var(--panel-deep); border-radius: 4px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.lever-detent {
+  position: absolute; left: 0; width: 12px; height: 2px;
+  background: var(--line); transform: translateY(1px);
+}
+.lever-knob {
+  position: absolute; left: 50%; width: 40px; height: 20px;
+  transform: translate(-50%, 50%);
+  background: linear-gradient(180deg, var(--brass-soft), var(--brass) 55%, #8a6b20);
+  border: 1px solid #7a5e1c; border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(28, 36, 32, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transition: bottom 0.08s ease;
+}
+.lever-knob.hot {
+  background: linear-gradient(180deg, #d97a5f, var(--signal) 55%, #8c3623);
+  border-color: #7c2f1e;
+}
+.lever-knob-grip {
+  position: absolute; left: 6px; right: 6px; top: 50%; height: 2px;
+  transform: translateY(-50%); background: rgba(28, 36, 32, 0.35); border-radius: 1px;
+  box-shadow: 0 -4px 0 rgba(28, 36, 32, 0.25), 0 4px 0 rgba(28, 36, 32, 0.25);
+}
+.lever-val { font-family: "Jost"; font-weight: 700; font-size: 20px; color: var(--panel); }
+
 @media (prefers-reduced-motion: reduce) {
-  .gauge .fill, .opt, .btn { transition: none; }
+  .gauge .fill, .opt, .btn, .lever-knob { transition: none; }
 }

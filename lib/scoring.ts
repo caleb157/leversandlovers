@@ -20,6 +20,14 @@ export interface Result {
 
 const MULTIPLIER_STEP = 0.125; // each intensity point on a multiplier lever adds 12.5%
 
+const VERDICT_LABELS: Record<number, string> = {
+  5: "Green — the lever combination is well within sustainable capacity. Build.",
+  4: "Favorable — intensity is real but bounded. Build, and watch your flagged levers.",
+  3: "Contested — you are near the edge of sustainable capacity. Redesign one or two heavy levers before committing.",
+  2: "Overloaded — this combination runs above 90% capacity. Change the context, the model, or the philosophy before proceeding.",
+  1: "Red — the current lever combination is not sustainably endurable. Do not build this as designed.",
+};
+
 export function score(answers: Answers): Result {
   let addWeighted = 0;
   let addMax = 0;
@@ -74,13 +82,75 @@ export function score(answers: Answers): Result {
   else if (finalIntensity < 90) verdict = 2;
   else verdict = 1;
 
-  const labels: Record<number, string> = {
-    5: "Green — the lever combination is well within sustainable capacity. Build.",
-    4: "Favorable — intensity is real but bounded. Build, and watch your flagged levers.",
-    3: "Contested — you are near the edge of sustainable capacity. Redesign one or two heavy levers before committing.",
-    2: "Overloaded — this combination runs above 90% capacity. Change the context, the model, or the philosophy before proceeding.",
-    1: "Red — the current lever combination is not sustainably endurable. Do not build this as designed.",
+  return {
+    baseIntensity: Math.round(baseIntensity),
+    multiplier: Math.round(multiplier * 100) / 100,
+    finalIntensity: Math.round(finalIntensity),
+    categoryScores: CATEGORIES.map((c) => ({
+      category: c,
+      pct: catMax[c] ? Math.round(((catWeighted[c] ?? 0) / catMax[c]) * 100) : 0,
+    })),
+    spectrum: Math.round(spectrum),
+    verdict,
+    verdictLabel: VERDICT_LABELS[verdict],
+    flags,
   };
+}
+
+// Manual board values: leverId -> 1–10 detent position.
+// Convert back to the 0–4 intensity scale and run the same weighted logic.
+export function scoreFromManual(values: Record<string, number>): Result {
+  let addWeighted = 0;
+  let addMax = 0;
+  let multiplier = 1;
+  const flags: string[] = [];
+
+  const catWeighted: Record<string, number> = {};
+  const catMax: Record<string, number> = {};
+
+  let specSum = 0;
+  let specN = 0;
+
+  for (const lever of LEVERS) {
+    const v = values[lever.id] ?? 5;
+    const raw = ((v - 1) / 9) * 4; // 1–10 -> 0–4
+    const maxI = Math.max(...lever.options.map((o) => o.intensity));
+    const intensity = Math.min(raw, maxI); // stay within this lever's real range
+
+    catWeighted[lever.category] =
+      (catWeighted[lever.category] ?? 0) + intensity * lever.weight;
+    catMax[lever.category] = (catMax[lever.category] ?? 0) + maxI * lever.weight;
+
+    if (lever.tier === "multiplier") {
+      multiplier += intensity * MULTIPLIER_STEP;
+      if (intensity >= 3) flags.push(shortName(lever));
+    } else {
+      addWeighted += intensity * lever.weight;
+      addMax += maxI * lever.weight;
+      if (lever.weight === 3 && intensity >= 3) flags.push(shortName(lever));
+    }
+
+    // Philosophical spectrum: use the spectrum of the option nearest in intensity.
+    const specOpts = lever.options.filter((o) => o.spectrum !== undefined);
+    if (specOpts.length) {
+      const nearest = specOpts.reduce((a, b) =>
+        Math.abs(b.intensity - intensity) < Math.abs(a.intensity - intensity) ? b : a
+      );
+      specSum += nearest.spectrum!;
+      specN++;
+    }
+  }
+
+  const baseIntensity = addMax ? (addWeighted / addMax) * 100 : 0;
+  const finalIntensity = Math.min(baseIntensity * multiplier, 120);
+  const spectrum = specN ? specSum / specN : 50;
+
+  let verdict: Result["verdict"];
+  if (finalIntensity < 40) verdict = 5;
+  else if (finalIntensity < 55) verdict = 4;
+  else if (finalIntensity < 70) verdict = 3;
+  else if (finalIntensity < 90) verdict = 2;
+  else verdict = 1;
 
   return {
     baseIntensity: Math.round(baseIntensity),
@@ -92,7 +162,7 @@ export function score(answers: Answers): Result {
     })),
     spectrum: Math.round(spectrum),
     verdict,
-    verdictLabel: labels[verdict],
+    verdictLabel: VERDICT_LABELS[verdict],
     flags,
   };
 }
@@ -104,7 +174,6 @@ function shortName(l: Lever): string {
     visa: "Visa stability",
     "skill-model-match": "Skill-to-model match",
     "locals-likeminded": "Like-minded locals",
-    "real-business": "Business realness",
   };
   return names[l.id] ?? l.id;
 }
