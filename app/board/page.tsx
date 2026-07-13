@@ -182,7 +182,9 @@ function LeverRow({
       >
         <span className={`chip chip-${lever.category.toLowerCase()}`} aria-hidden />
         <span className="lrow-name">{lever.name}</span>
-        <span className="lrow-wt">Weight {lever.weight}</span>
+        <span className={`lrow-wt ${lever.weight >= 4 ? "heavy" : ""}`}>
+          Weight {lever.weight}
+        </span>
         <span className={`lrow-val ${hot ? "hot" : ""}`}>{value}</span>
         <span className="lrow-caret" aria-hidden>
           {open ? "−" : "+"}

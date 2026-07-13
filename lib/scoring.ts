@@ -15,20 +15,21 @@ export interface Result {
   flags: string[]; // heavy (weight 4+) levers currently running hot
 }
 
+// Verdict = intensity rating, 1 (calm) – 5 (most intense).
 const VERDICT_LABELS: Record<number, string> = {
-  5: "Green — the lever combination is well within sustainable capacity. Build.",
-  4: "Favorable — intensity is real but bounded. Build, and watch your flagged levers.",
+  1: "Green — the lever combination is well within sustainable capacity. Build.",
+  2: "Favorable — intensity is real but bounded. Build, and watch your flagged levers.",
   3: "Contested — you are near the edge of sustainable capacity. Redesign one or two heavy levers before committing.",
-  2: "Overloaded — this combination runs above 90% capacity. Change the context, the model, or the philosophy before proceeding.",
-  1: "Red — the current lever combination is not sustainably endurable. Do not build this as designed.",
+  4: "Overloaded — this combination runs above 90% capacity. Change the context, the model, or the philosophy before proceeding.",
+  5: "Red — the current lever combination is not sustainably endurable. Do not build this as designed.",
 };
 
 function verdictFor(finalIntensity: number): Result["verdict"] {
-  if (finalIntensity < 40) return 5;
-  if (finalIntensity < 55) return 4;
+  if (finalIntensity < 40) return 1;
+  if (finalIntensity < 55) return 2;
   if (finalIntensity < 70) return 3;
-  if (finalIntensity < 90) return 2;
-  return 1;
+  if (finalIntensity < 90) return 4;
+  return 5;
 }
 
 function buildResult(

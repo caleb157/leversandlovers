@@ -174,6 +174,7 @@ a.btn { text-decoration: none; display: inline-block; }
   font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
   color: var(--brass); white-space: nowrap;
 }
+.lrow-wt.heavy, .q .wt.heavy, .adm-weight.heavy { color: var(--signal); font-weight: 700; }
 .lrow-val {
   font-weight: 700; font-size: 17px; color: var(--panel);
   min-width: 26px; text-align: right;

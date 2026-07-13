@@ -201,7 +201,9 @@ export default function AdminPage() {
                       onChange={(e) => update(l.id, { name: e.target.value })}
                       aria-label="Lever name"
                     />
-                    <label className="adm-weight ui">
+                    <label
+                      className={`adm-weight ui ${l.weight >= 4 ? "heavy" : ""}`}
+                    >
                       Weight{" "}
                       <select
                         value={l.weight}
