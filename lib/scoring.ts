@@ -173,12 +173,5 @@ export function scoreFromManual(
 }
 
 function shortName(l: Lever): string {
-  const names: Record<string, string> = {
-    surveillance: "Surveillance intensity",
-    "family-fit": "Family fit",
-    visa: "Visa stability",
-    "skill-model-match": "Skill-to-model match",
-    "locals-likeminded": "Like-minded locals",
-  };
-  return names[l.id] ?? l.id;
+  return l.name ?? l.id;
 }
