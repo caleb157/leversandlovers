@@ -164,10 +164,7 @@ export default function Page() {
           <section className="card">
             <div className="cat-header">
               <h2>The Panel</h2>
-              <span className="count">
-                Base {result.baseIntensity} × {result.multiplier} ={" "}
-                {result.finalIntensity} intensity
-              </span>
+              <span className="count">{result.finalIntensity} intensity</span>
             </div>
             <p className="verdict-num">
               {result.verdict}

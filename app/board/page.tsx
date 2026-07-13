@@ -304,10 +304,6 @@ export default function BoardPage() {
           <div className="strip-detail">
             <div className="strip-intensity ui">
               {result.finalIntensity} intensity
-              <span className="strip-breakdown">
-                {" "}
-                — base {result.baseIntensity} × {result.multiplier}
-              </span>
             </div>
             <p className="strip-label">{result.verdictLabel}</p>
           </div>

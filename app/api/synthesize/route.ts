@@ -10,10 +10,9 @@ ELEVATOR PITCH: ${pitch || "(not provided)"}
 VALUE PROPOSITION HYPOTHESIS: ${valueProp || "(not provided)"}
 
 LEVER QUIZ RESULTS:
-- Final intensity: ${result.finalIntensity}/100 (base ${result.baseIntensity} × multiplier ${result.multiplier})
+- Final intensity: ${result.finalIntensity}/100
 - Verdict: ${result.verdict}/5 — ${result.verdictLabel}
 - Category intensities: ${result.categoryScores.map((c: any) => `${c.category} ${c.pct}%`).join(", ")}
-- Philosophy spectrum: ${result.spectrum}/100 (0 = traveling on business, 100 = traveling on mission)
 - Hot levers: ${result.flags.join(", ") || "none"}
 
 FULL ANSWERS:
