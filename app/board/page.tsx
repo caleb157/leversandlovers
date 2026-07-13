@@ -268,6 +268,12 @@ export default function BoardPage() {
       return next;
     });
 
+  const resetToNeutral = () => {
+    const neutral: Record<string, number> = {};
+    for (const l of levers) neutral[l.id] = 3;
+    setValues(neutral);
+  };
+
   const resetToQuiz = () => {
     localStorage.removeItem(MANUAL_KEY);
     let answers: Answers = {};
@@ -326,6 +332,9 @@ export default function BoardPage() {
         <a className="btn ghost" href="/">
           ← Back to the quiz
         </a>
+        <button className="btn ghost" onClick={resetToNeutral}>
+          Reset all to 3
+        </button>
         <button className="btn ghost" onClick={resetToQuiz}>
           Reset to quiz answers
         </button>

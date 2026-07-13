@@ -215,7 +215,7 @@ const BASE: BaseLever[] = [
     id: "visa",
     category: "Environmental",
     question: "How stable and renewable is your visa pathway?",
-    weight: 3,
+    weight: 2,
     tier: "multiplier",
     note: "If the founder can be removed, everything built on trust is fragile.",
     options: [
