@@ -25,10 +25,10 @@ const VERDICT_LABELS: Record<number, string> = {
 };
 
 function verdictFor(finalIntensity: number): Result["verdict"] {
-  if (finalIntensity < 40) return 1;
-  if (finalIntensity < 55) return 2;
-  if (finalIntensity < 70) return 3;
-  if (finalIntensity < 90) return 4;
+  if (finalIntensity < 33) return 1;
+  if (finalIntensity <= 50) return 2;
+  if (finalIntensity <= 66) return 3;
+  if (finalIntensity <= 85) return 4;
   return 5;
 }
 
