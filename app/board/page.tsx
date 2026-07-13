@@ -14,15 +14,19 @@ import {
   Lever,
 } from "../../lib/levers";
 import { Answers, scoreFromManual } from "../../lib/scoring";
+import { applyOverrides } from "../../lib/overrides";
 
 const ANSWERS_KEY = "b4t-answers";
 const MANUAL_KEY = "b4t-manual";
 const DETENTS = 10;
 
 // Map a quiz answer's 0–4 intensity onto the 1–10 detent scale.
-function seedFromAnswers(answers: Answers): Record<string, number> {
+function seedFromAnswers(
+  answers: Answers,
+  levers: Lever[]
+): Record<string, number> {
   const values: Record<string, number> = {};
-  for (const lever of LEVERS) {
+  for (const lever of levers) {
     const idx = answers[lever.id];
     if (idx === undefined || !lever.options[idx]) {
       values[lever.id] = 5;
@@ -33,16 +37,16 @@ function seedFromAnswers(answers: Answers): Record<string, number> {
   return values;
 }
 
-function loadInitial(): Record<string, number> {
+function loadInitial(levers: Lever[]): Record<string, number> {
   let answers: Answers = {};
   try {
     answers = JSON.parse(localStorage.getItem(ANSWERS_KEY) ?? "{}");
   } catch {}
-  const seeded = seedFromAnswers(answers);
+  const seeded = seedFromAnswers(answers, levers);
   try {
     const manual = JSON.parse(localStorage.getItem(MANUAL_KEY) ?? "null");
     if (manual && typeof manual === "object") {
-      for (const lever of LEVERS) {
+      for (const lever of levers) {
         const v = manual[lever.id];
         if (typeof v === "number" && v >= 1 && v <= DETENTS) {
           seeded[lever.id] = Math.round(v);
@@ -229,9 +233,12 @@ function LeverRow({
 export default function BoardPage() {
   const [values, setValues] = useState<Record<string, number> | null>(null);
   const [openIds, setOpenIds] = useState<Set<string>>(new Set());
+  const [levers, setLevers] = useState(LEVERS);
 
   useEffect(() => {
-    setValues(loadInitial());
+    const merged = applyOverrides();
+    setLevers(merged);
+    setValues(loadInitial(merged));
   }, []);
 
   useEffect(() => {
@@ -239,8 +246,8 @@ export default function BoardPage() {
   }, [values]);
 
   const result = useMemo(
-    () => (values ? scoreFromManual(values) : null),
-    [values]
+    () => (values ? scoreFromManual(values, levers) : null),
+    [values, levers]
   );
 
   if (!values || !result) {
@@ -270,7 +277,7 @@ export default function BoardPage() {
     try {
       answers = JSON.parse(localStorage.getItem(ANSWERS_KEY) ?? "{}");
     } catch {}
-    setValues(seedFromAnswers(answers));
+    setValues(seedFromAnswers(answers, levers));
   };
 
   return (
@@ -328,7 +335,7 @@ export default function BoardPage() {
       </div>
 
       {CATEGORIES.map((cat) => {
-        const catLevers = LEVERS.filter((l) => l.category === cat);
+        const catLevers = levers.filter((l) => l.category === cat);
         const catScore = result.categoryScores.find(
           (c) => c.category === cat
         );
@@ -352,6 +359,9 @@ export default function BoardPage() {
           </section>
         );
       })}
+      <a className="admin-dot" href="/admin" aria-label="Editor view">
+        ⚙
+      </a>
     </main>
   );
 }

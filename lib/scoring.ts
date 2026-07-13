@@ -28,7 +28,7 @@ const VERDICT_LABELS: Record<number, string> = {
   1: "Red — the current lever combination is not sustainably endurable. Do not build this as designed.",
 };
 
-export function score(answers: Answers): Result {
+export function score(answers: Answers, levers: Lever[] = LEVERS): Result {
   let addWeighted = 0;
   let addMax = 0;
   let multiplier = 1;
@@ -37,7 +37,7 @@ export function score(answers: Answers): Result {
   const catWeighted: Record<string, number> = {};
   const catMax: Record<string, number> = {};
 
-  for (const lever of LEVERS) {
+  for (const lever of levers) {
     const idx = answers[lever.id];
     if (idx === undefined) continue;
     const opt = lever.options[idx];
@@ -63,7 +63,7 @@ export function score(answers: Answers): Result {
   // Philosophical spectrum
   let specSum = 0;
   let specN = 0;
-  for (const lever of LEVERS) {
+  for (const lever of levers) {
     const idx = answers[lever.id];
     if (idx === undefined) continue;
     const s = lever.options[idx].spectrum;
@@ -99,7 +99,10 @@ export function score(answers: Answers): Result {
 
 // Manual board values: leverId -> 1–10 detent position.
 // Convert back to the 0–4 intensity scale and run the same weighted logic.
-export function scoreFromManual(values: Record<string, number>): Result {
+export function scoreFromManual(
+  values: Record<string, number>,
+  levers: Lever[] = LEVERS
+): Result {
   let addWeighted = 0;
   let addMax = 0;
   let multiplier = 1;
@@ -111,7 +114,7 @@ export function scoreFromManual(values: Record<string, number>): Result {
   let specSum = 0;
   let specN = 0;
 
-  for (const lever of LEVERS) {
+  for (const lever of levers) {
     const v = values[lever.id] ?? 5;
     const raw = ((v - 1) / 9) * 4; // 1–10 -> 0–4
     const maxI = Math.max(...lever.options.map((o) => o.intensity));

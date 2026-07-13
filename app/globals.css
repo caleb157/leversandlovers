@@ -242,6 +242,48 @@ a.btn { text-decoration: none; display: inline-block; }
 }
 .lever-val { font-family: "Jost"; font-weight: 700; font-size: 20px; color: var(--panel); }
 
+/* ─── Editor / admin ─── */
+.admin-dot {
+  position: fixed; bottom: 14px; right: 16px; z-index: 30;
+  font-size: 15px; text-decoration: none; color: var(--ink);
+  opacity: 0.18; transition: opacity 0.15s ease;
+}
+.admin-dot:hover, .admin-dot:focus-visible { opacity: 0.85; outline: none; }
+
+.admin-bar { justify-content: space-between; }
+.admin-status { font-size: 13px; color: var(--brass); letter-spacing: 0.08em; }
+.admin-bar-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.adm {
+  border: 1px solid var(--line); border-radius: 4px;
+  padding: 14px 16px 18px; margin-bottom: 14px;
+}
+.adm.edited { border-color: var(--brass); box-shadow: 0 0 0 1px var(--brass); }
+.adm-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.adm-name {
+  font-family: "Jost", sans-serif; font-weight: 600; font-size: 16px;
+  border: 1px solid transparent; border-radius: 4px; background: transparent;
+  padding: 4px 6px; flex: 1; min-width: 180px; color: var(--ink);
+}
+.adm-name:hover, .adm-name:focus { border-color: var(--line); background: #fffdf6; outline: none; }
+.adm-weight { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brass); }
+.adm-weight select {
+  font-family: "Jost"; font-size: 14px; padding: 2px 6px; margin-left: 4px;
+  border: 1.5px solid var(--line); border-radius: 4px; background: #fffdf6; color: var(--ink);
+}
+.adm-reset {
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  background: transparent; border: 1px solid var(--signal); color: var(--signal);
+  border-radius: 999px; padding: 2px 10px; cursor: pointer;
+}
+.adm-q { min-height: 58px; }
+.adm textarea.text { min-height: 58px; font-size: 14.5px; }
+.adm-opt { display: flex; gap: 8px; margin-bottom: 6px; }
+.adm-opt input.text { padding: 7px 10px; font-size: 14px; }
+.adm-int { width: 64px; flex-shrink: 0; text-align: center; }
+.adm-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+@media (max-width: 640px) { .adm-cols { grid-template-columns: 1fr; } }
+
 @media (prefers-reduced-motion: reduce) {
   .gauge .fill, .opt, .btn, .lever-knob { transition: none; }
 }

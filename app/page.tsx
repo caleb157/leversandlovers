@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { LEVERS, CATEGORIES, CATEGORY_BLURBS, Category } from "../lib/levers";
 import { score, Answers, Result } from "../lib/scoring";
+import { applyOverrides } from "../lib/overrides";
 
 const STEPS = ["Pitch", ...CATEGORIES, "Results"] as const;
 
@@ -14,22 +15,27 @@ export default function Page() {
   const [synth, setSynth] = useState("");
   const [loading, setLoading] = useState(false);
   const [synthErr, setSynthErr] = useState("");
+  const [levers, setLevers] = useState(LEVERS);
+
+  useEffect(() => {
+    setLevers(applyOverrides());
+  }, []);
 
   const currentCat =
     step >= 1 && step <= CATEGORIES.length ? CATEGORIES[step - 1] : null;
   const catLevers = useMemo(
-    () => (currentCat ? LEVERS.filter((l) => l.category === currentCat) : []),
-    [currentCat]
+    () => (currentCat ? levers.filter((l) => l.category === currentCat) : []),
+    [currentCat, levers]
   );
   const catComplete = catLevers.every((l) => answers[l.id] !== undefined);
   const result: Result | null =
-    step === STEPS.length - 1 ? score(answers) : null;
+    step === STEPS.length - 1 ? score(answers, levers) : null;
 
   async function runSynthesis(r: Result) {
     setLoading(true);
     setSynthErr("");
     try {
-      const answersSummary = LEVERS.filter((l) => answers[l.id] !== undefined)
+      const answersSummary = levers.filter((l) => answers[l.id] !== undefined)
         .map((l) => `- [${l.category}] ${l.question} → ${l.options[answers[l.id]].label}`)
         .join("\n");
       const res = await fetch("/api/synthesize", {
@@ -233,6 +239,9 @@ export default function Page() {
           )}
         </>
       )}
+      <a className="admin-dot" href="/admin" aria-label="Editor view">
+        ⚙
+      </a>
     </main>
   );
 }
