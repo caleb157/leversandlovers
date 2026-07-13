@@ -12,7 +12,7 @@ export interface LeverOverride {
   name?: string;
   question?: string;
   description?: string;
-  weight?: 1 | 2 | 3;
+  weight?: 1 | 2 | 3 | 4 | 5;
   options?: OptionOverride[];
   up?: string[];
   down?: string[];

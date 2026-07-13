@@ -18,7 +18,9 @@ export interface Result {
   flags: string[]; // named heavy levers currently running hot
 }
 
-const MULTIPLIER_STEP = 0.125; // each intensity point on a multiplier lever adds 12.5%
+// Each intensity point on a multiplier lever adds 6.25%. Tuned so an
+// all-midpoint board lands around verdict 3 ("Contested") rather than red.
+const MULTIPLIER_STEP = 0.0625;
 
 const VERDICT_LABELS: Record<number, string> = {
   5: "Green — the lever combination is well within sustainable capacity. Build.",
@@ -53,7 +55,7 @@ export function score(answers: Answers, levers: Lever[] = LEVERS): Result {
     } else {
       addWeighted += opt.intensity * lever.weight;
       addMax += maxI * lever.weight;
-      if (lever.weight === 3 && opt.intensity >= 3) flags.push(shortName(lever));
+      if (lever.weight >= 4 && opt.intensity >= 3) flags.push(shortName(lever));
     }
   }
 
@@ -97,8 +99,9 @@ export function score(answers: Answers, levers: Lever[] = LEVERS): Result {
   };
 }
 
-// Manual board values: leverId -> 1–10 detent position.
-// Convert back to the 0–4 intensity scale and run the same weighted logic.
+// Manual board values: leverId -> 1–5 detent position.
+// Map proportionally onto each lever's own intensity range (detent 1 = min,
+// detent 5 = that lever's max), then run the same weighted logic.
 export function scoreFromManual(
   values: Record<string, number>,
   levers: Lever[] = LEVERS
@@ -115,10 +118,9 @@ export function scoreFromManual(
   let specN = 0;
 
   for (const lever of levers) {
-    const v = values[lever.id] ?? 5;
-    const raw = ((v - 1) / 9) * 4; // 1–10 -> 0–4
+    const v = values[lever.id] ?? 3;
     const maxI = Math.max(...lever.options.map((o) => o.intensity));
-    const intensity = Math.min(raw, maxI); // stay within this lever's real range
+    const intensity = ((v - 1) / 4) * maxI; // 1–5 -> 0–maxI
 
     catWeighted[lever.category] =
       (catWeighted[lever.category] ?? 0) + intensity * lever.weight;
@@ -130,7 +132,7 @@ export function scoreFromManual(
     } else {
       addWeighted += intensity * lever.weight;
       addMax += maxI * lever.weight;
-      if (lever.weight === 3 && intensity >= 3) flags.push(shortName(lever));
+      if (lever.weight >= 4 && intensity >= 3) flags.push(shortName(lever));
     }
 
     // Philosophical spectrum: use the spectrum of the option nearest in intensity.

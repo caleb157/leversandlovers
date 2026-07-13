@@ -18,9 +18,10 @@ import { applyOverrides } from "../../lib/overrides";
 
 const ANSWERS_KEY = "b4t-answers";
 const MANUAL_KEY = "b4t-manual";
-const DETENTS = 10;
+const DETENTS = 5;
 
-// Map a quiz answer's 0–4 intensity onto the 1–10 detent scale.
+// Map a quiz answer onto the 1–5 detent scale, proportional to the
+// lever's own intensity range (detent 5 = that lever's hottest option).
 function seedFromAnswers(
   answers: Answers,
   levers: Lever[]
@@ -28,10 +29,13 @@ function seedFromAnswers(
   const values: Record<string, number> = {};
   for (const lever of levers) {
     const idx = answers[lever.id];
-    if (idx === undefined || !lever.options[idx]) {
-      values[lever.id] = 5;
+    const maxI = Math.max(...lever.options.map((o) => o.intensity));
+    if (idx === undefined || !lever.options[idx] || maxI === 0) {
+      values[lever.id] = 3;
     } else {
-      values[lever.id] = Math.round((lever.options[idx].intensity / 4) * 9 + 1);
+      values[lever.id] = Math.round(
+        (lever.options[idx].intensity / maxI) * 4 + 1
+      );
     }
   }
   return values;
@@ -167,7 +171,7 @@ function LeverRow({
   onToggle: () => void;
   onChange: (v: number) => void;
 }) {
-  const hot = value >= 8;
+  const hot = value >= 4;
   return (
     <div className={`lrow ${open ? "open" : ""}`}>
       <button
@@ -350,7 +354,7 @@ export default function BoardPage() {
               <LeverRow
                 key={l.id}
                 lever={l}
-                value={values[l.id] ?? 5}
+                value={values[l.id] ?? 3}
                 open={openIds.has(l.id)}
                 onToggle={() => toggle(l.id)}
                 onChange={(v) => setLever(l.id, v)}

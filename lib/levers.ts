@@ -1,6 +1,6 @@
 // The Levers of B4T — data model
 // tiers: "additive" levers sum into base intensity; "multiplier" levers scale it.
-// weight: 1 = straw-on-the-camel, 2 = standard, 3 = heavy.
+// weight: 1 (barely matters) – 5 (dominant). All seeded at 3 pending tuning.
 // Each option maps to an intensity score 0 (low) – 4 (high).
 // "philosophical" levers also carry a spectrum value 0 (business end) – 100 (mission end).
 
@@ -21,7 +21,7 @@ export interface Lever {
   category: Category;
   name: string; // short display name for the board
   question: string;
-  weight: 1 | 2 | 3;
+  weight: 1 | 2 | 3 | 4 | 5;
   tier: "additive" | "multiplier";
   note?: string;
   options: Option[];
@@ -52,7 +52,7 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question:
       "Do other expats live within reasonable distance for frequent personal contact?",
-    weight: 1,
+    weight: 3,
     tier: "additive",
     options: yn(true),
   },
@@ -60,7 +60,7 @@ const BASE: BaseLever[] = [
     id: "lived-in-city",
     category: "Environmental",
     question: "Have you lived in the city you are building the business in?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "Yes, 2+ years", intensity: 0 },
@@ -73,7 +73,7 @@ const BASE: BaseLever[] = [
     id: "foreigners-before",
     category: "Environmental",
     question: "Have other foreigners lived there before you?",
-    weight: 1,
+    weight: 3,
     tier: "additive",
     options: yn(true),
   },
@@ -82,7 +82,7 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question:
       "How much local language does your specific business model require you to have?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "Almost none — English or translators suffice", intensity: 0 },
@@ -96,7 +96,7 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question:
       "Does the legal system in your country and city carry a lot of bureaucracy?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: yn(false),
   },
@@ -104,7 +104,7 @@ const BASE: BaseLever[] = [
     id: "taxes",
     category: "Environmental",
     question: "Are taxes punitive for businesses in your context?",
-    weight: 1,
+    weight: 3,
     tier: "additive",
     options: yn(false),
   },
@@ -113,7 +113,7 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question:
       "Is there a good business ecosystem in your location for your industry?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: yn(true),
   },
@@ -122,7 +122,7 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question:
       "Is this business already working in your location — including expat-run examples in your country or region?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "Yes, expats run it successfully here", intensity: 0 },
@@ -136,7 +136,7 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question:
       "Does reaching your target group require moving your business location away from where you live, where your business type normally operates, or somewhere pleasant to be?",
-    weight: 1,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "No — they're where we naturally live and operate", intensity: 0 },
@@ -164,7 +164,7 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question:
       "How much friction exists in banking, forex, and moving money in and out of the country?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "Frictionless", intensity: 0 },
@@ -178,7 +178,7 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question:
       "How reliable are power, internet, and logistics infrastructure where you operate?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "Fully reliable", intensity: 0 },
@@ -206,7 +206,7 @@ const BASE: BaseLever[] = [
     id: "visa",
     category: "Environmental",
     question: "How stable and renewable is your visa pathway?",
-    weight: 2,
+    weight: 3,
     tier: "multiplier",
     note: "If the founder can be removed, everything built on trust is fragile.",
     options: [
@@ -222,7 +222,7 @@ const BASE: BaseLever[] = [
     id: "founded-before",
     category: "Personal",
     question: "Have you founded a business before?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: yn(true),
   },
@@ -230,7 +230,7 @@ const BASE: BaseLever[] = [
     id: "sales-experience",
     category: "Personal",
     question: "Have you done sales before?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: yn(true),
   },
@@ -238,7 +238,7 @@ const BASE: BaseLever[] = [
     id: "industry-experience",
     category: "Personal",
     question: "Have you worked in your industry before?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: yn(true),
   },
@@ -246,7 +246,7 @@ const BASE: BaseLever[] = [
     id: "coach",
     category: "Personal",
     question: "Do you have a coach?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: yn(true, 2),
   },
@@ -254,7 +254,7 @@ const BASE: BaseLever[] = [
     id: "advisors",
     category: "Personal",
     question: "Do you have advisors who know your specific industry?",
-    weight: 1,
+    weight: 3,
     tier: "additive",
     options: yn(true, 2),
   },
@@ -263,7 +263,7 @@ const BASE: BaseLever[] = [
     category: "Personal",
     question:
       "Does the bottleneck function of your business model (sales, operations, craft, finance) match your strongest gifting?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     note: "A mismatched founder runs the machine permanently hot.",
     options: [
@@ -278,7 +278,7 @@ const BASE: BaseLever[] = [
     category: "Personal",
     question:
       "Do you intend to work fewer hours in the business than a normal employee would (under ~30 hours/week)?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     note: "Low hours with high ambition is an intensity trap.",
     options: [
@@ -291,7 +291,7 @@ const BASE: BaseLever[] = [
     id: "timeline",
     category: "Personal",
     question: "How long do you expect to spend building this business?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "7+ years", intensity: 0 },
@@ -319,7 +319,7 @@ const BASE: BaseLever[] = [
     id: "capital",
     category: "Business",
     question: "How much capital do you have access to, relative to what the model needs?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "Fully capitalized with buffer", intensity: 0 },
@@ -346,7 +346,7 @@ const BASE: BaseLever[] = [
     category: "Business",
     question:
       "Do you already know a large customer for your business who is not in your family?",
-    weight: 1,
+    weight: 3,
     tier: "additive",
     options: yn(true),
   },
@@ -355,7 +355,7 @@ const BASE: BaseLever[] = [
     category: "Business",
     question:
       "How well do you understand the needs of the customer you're serving — are you a target customer or end user yourself?",
-    weight: 1,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "Yes — I want or need this myself", intensity: 0 },
@@ -368,7 +368,7 @@ const BASE: BaseLever[] = [
     category: "Business",
     question:
       "How is the business's revenue funded? This shapes cash flow and long-term sustainability.",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "No subsidies — directly market-driven", intensity: 3 },
@@ -384,7 +384,7 @@ const BASE: BaseLever[] = [
     id: "ownership",
     category: "Business",
     question: "Do you own the business, or is it owned by someone else?",
-    weight: 1,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "I own it (or with partners)", intensity: 0 },
@@ -396,7 +396,7 @@ const BASE: BaseLever[] = [
     id: "franchise",
     category: "Business",
     question: "Is this a franchise/proven playbook, or your own idea?",
-    weight: 1,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "Franchise or proven playbook", intensity: 0 },
@@ -408,7 +408,7 @@ const BASE: BaseLever[] = [
     id: "innovation",
     category: "Business",
     question: "How innovative are you trying to be with the product or service?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "Branding tweak on a known offer", intensity: 0 },
@@ -421,7 +421,7 @@ const BASE: BaseLever[] = [
     id: "scale",
     category: "Business",
     question: "What scale are you aiming for?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "Small, low-profile business", intensity: 1 },
@@ -434,7 +434,7 @@ const BASE: BaseLever[] = [
     category: "Business",
     question:
       "Do you understand your supply chain and have good access to it (vendors, service providers)?",
-    weight: 1,
+    weight: 3,
     tier: "additive",
     options: yn(true),
   },
@@ -443,7 +443,7 @@ const BASE: BaseLever[] = [
     category: "Business",
     question:
       "How complex is your business model? Does each business-model-canvas square take a sentence, or two paragraphs?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "A sentence per square", intensity: 0 },
@@ -456,7 +456,7 @@ const BASE: BaseLever[] = [
     category: "Business",
     question:
       "How long is your cash conversion cycle — from spending money to getting paid?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "Days (cash business)", intensity: 0 },
@@ -469,7 +469,7 @@ const BASE: BaseLever[] = [
     id: "physical-digital",
     category: "Business",
     question: "Is your deliverable physical or digital/service?",
-    weight: 1,
+    weight: 3,
     tier: "additive",
     note: "Physical products drag in supply chain, QC, logistics, and working-capital levers all at once.",
     options: [
@@ -485,7 +485,7 @@ const BASE: BaseLever[] = [
     id: "team",
     category: "Transformational",
     question: "Do you have a team for the transformational side of the work?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: yn(true),
   },
@@ -494,7 +494,7 @@ const BASE: BaseLever[] = [
     category: "Transformational",
     question:
       "Is your target people group educated and skilled in the work you're trying to do?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "Skilled and educated", intensity: 0 },
@@ -507,16 +507,16 @@ const BASE: BaseLever[] = [
     category: "Transformational",
     question:
       "Are you able to hire and employ mostly people from your target culture?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: yn(true),
   },
   {
     id: "locals-likeminded",
-    category: "Transformational",
+    category: "Environmental",
     question:
       "Are there like-minded locals available for sensitive or strategic roles, whom you know or can reach through your network?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: yn(true, 4),
   },
@@ -525,7 +525,7 @@ const BASE: BaseLever[] = [
     category: "Transformational",
     question:
       "Are you gifted for the kind of transformational work your model requires?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: yn(true),
   },
@@ -534,7 +534,7 @@ const BASE: BaseLever[] = [
     category: "Transformational",
     question:
       "Does your organization support your specific type of work, and are you in line with it?",
-    weight: 1,
+    weight: 3,
     tier: "additive",
     options: yn(true),
   },
@@ -543,7 +543,7 @@ const BASE: BaseLever[] = [
     category: "Transformational",
     question:
       "Does your team have a clearly articulated flavor of B4T, or is it still vague?",
-    weight: 1,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "Clearly articulated and shared", intensity: 0 },
@@ -557,7 +557,7 @@ const BASE: BaseLever[] = [
     category: "Business",
     question:
       "Do you love the quality and beauty of what you sell, or is it utilitarian to you?",
-    weight: 1,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "I love it — craft matters to me", intensity: 0, spectrum: 20 },
@@ -570,7 +570,7 @@ const BASE: BaseLever[] = [
     category: "Transformational",
     question:
       "How much of your business's daily operations — office work, service delivery, product creation — happens in front of local people?",
-    weight: 2,
+    weight: 3,
     tier: "additive",
     options: [
       { label: "Highly visible — shopfront, factory floor", intensity: 3, spectrum: 25 },
@@ -1230,16 +1230,17 @@ const META: Record<string, LeverMeta> = {
   "locals-likeminded": {
     name: "Like-minded locals",
     description:
-      "Measures whether like-minded locals are available — and reachable through your network — for sensitive or strategic roles. Without them, the most delicate parts of the work stay founder-dependent forever, which caps everything at your capacity and your visa.",
+      "Measures whether like-minded locals exist in your context — and are reachable through your network — for sensitive or strategic roles. This is a condition of the place more than a choice: without them, the most delicate parts of the work stay founder-dependent, capped at your capacity and your visa.",
     prosCons: {
       up: [
-        "Where none exist yet, developing the first ones is the pioneering work itself",
-        "Building slowly with new believers avoids importing outside culture",
+        "No like-minded locals exist yet, or none you can reach",
+        "Every sensitive role rests on the founder indefinitely",
+        "The work's continuity is tied entirely to your presence",
       ],
       down: [
-        "Trusted locals make the work survivable past your departure",
-        "Sensitive roles held by locals are far less exposed than founder-held ones",
-        "A local partner reads situations you will always misread",
+        "Trusted locals are available for sensitive and strategic roles",
+        "A local partner reads situations you would always misread",
+        "The work can survive your departure",
       ],
     },
   },

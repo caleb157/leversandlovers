@@ -11,11 +11,67 @@ import {
   applyOverrides,
 } from "../../lib/overrides";
 
+// Change via NEXT_PUBLIC_ADMIN_CODE in Vercel env vars (or edit here).
+const PASSCODE = process.env.NEXT_PUBLIC_ADMIN_CODE ?? "pullthelever";
+const UNLOCK_KEY = "b4t-admin-unlocked";
+
+function PasscodeGate({ onUnlock }: { onUnlock: () => void }) {
+  const [code, setCode] = useState("");
+  const [wrong, setWrong] = useState(false);
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (code === PASSCODE) {
+      sessionStorage.setItem(UNLOCK_KEY, "1");
+      onUnlock();
+    } else {
+      setWrong(true);
+    }
+  };
+
+  return (
+    <main className="shell">
+      <header className="masthead">
+        <div className="eyebrow">Editor View</div>
+        <h1>Lever Editor</h1>
+        <hr className="rule" />
+      </header>
+      <form className="card gate" onSubmit={submit}>
+        <label className="lbl" htmlFor="pc">
+          Passcode
+        </label>
+        <input
+          id="pc"
+          className="text"
+          type="password"
+          autoFocus
+          value={code}
+          onChange={(e) => {
+            setCode(e.target.value);
+            setWrong(false);
+          }}
+        />
+        {wrong && <p className="small gate-err">That's not it.</p>}
+        <div className="nav">
+          <a className="btn ghost" href="/">
+            ← Back
+          </a>
+          <button className="btn" type="submit">
+            Unlock
+          </button>
+        </div>
+      </form>
+    </main>
+  );
+}
+
 export default function AdminPage() {
   const [overrides, setOverrides] = useState<Overrides | null>(null);
   const [copied, setCopied] = useState(false);
+  const [unlocked, setUnlocked] = useState<boolean | null>(null);
 
   useEffect(() => {
+    setUnlocked(sessionStorage.getItem(UNLOCK_KEY) === "1");
     setOverrides(loadOverrides());
   }, []);
 
@@ -24,7 +80,7 @@ export default function AdminPage() {
     [overrides]
   );
 
-  if (!overrides) {
+  if (unlocked === null || !overrides) {
     return (
       <main className="shell">
         <p className="small" style={{ textAlign: "center", marginTop: 60 }}>
@@ -32,6 +88,10 @@ export default function AdminPage() {
         </p>
       </main>
     );
+  }
+
+  if (!unlocked) {
+    return <PasscodeGate onUnlock={() => setUnlocked(true)} />;
   }
 
   const editedCount = Object.keys(overrides).length;
@@ -147,13 +207,20 @@ export default function AdminPage() {
                         value={l.weight}
                         onChange={(e) =>
                           update(l.id, {
-                            weight: Number(e.target.value) as 1 | 2 | 3,
+                            weight: Number(e.target.value) as
+                              | 1
+                              | 2
+                              | 3
+                              | 4
+                              | 5,
                           })
                         }
                       >
                         <option value={1}>1</option>
                         <option value={2}>2</option>
                         <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
                       </select>
                     </label>
                     {l.tier === "multiplier" && (

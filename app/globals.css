@@ -250,6 +250,9 @@ a.btn { text-decoration: none; display: inline-block; }
 }
 .admin-dot:hover, .admin-dot:focus-visible { opacity: 0.85; outline: none; }
 
+.gate { max-width: 420px; margin: 0 auto; }
+.gate-err { color: var(--signal); margin-top: 8px; }
+
 .admin-bar { justify-content: space-between; }
 .admin-status { font-size: 13px; color: var(--brass); letter-spacing: 0.08em; }
 .admin-bar-btns { display: flex; gap: 8px; flex-wrap: wrap; }
