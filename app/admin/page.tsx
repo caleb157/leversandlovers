@@ -223,9 +223,6 @@ export default function AdminPage() {
                         <option value={5}>5</option>
                       </select>
                     </label>
-                    {l.tier === "multiplier" && (
-                      <span className="lrow-wt">multiplier</span>
-                    )}
                     {edited && (
                       <button
                         className="adm-reset ui"
@@ -285,9 +282,7 @@ export default function AdminPage() {
                   <div className="adm-cols">
                     <div>
                       <label className="lbl">
-                        {cat === "Environmental"
-                          ? "High intensity looks like"
-                          : "Why pull it up"}{" "}
+                        High intensity looks like{" "}
                         (one per line)
                       </label>
                       <textarea
@@ -304,9 +299,7 @@ export default function AdminPage() {
                     </div>
                     <div>
                       <label className="lbl">
-                        {cat === "Environmental"
-                          ? "Low intensity looks like"
-                          : "Why ease it down"}{" "}
+                        Low intensity looks like{" "}
                         (one per line)
                       </label>
                       <textarea

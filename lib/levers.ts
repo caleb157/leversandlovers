@@ -73,7 +73,7 @@ const BASE: BaseLever[] = [
     id: "foreigners-before",
     category: "Environmental",
     question: "Have other foreigners lived there before you?",
-    weight: 3,
+    weight: 2,
     tier: "additive",
     options: yn(true),
   },
@@ -82,7 +82,7 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question:
       "How much local language does your specific business model require you to have?",
-    weight: 3,
+    weight: 4,
     tier: "additive",
     options: [
       { label: "Almost none — English or translators suffice", intensity: 0 },
@@ -104,7 +104,7 @@ const BASE: BaseLever[] = [
     id: "taxes",
     category: "Environmental",
     question: "Are taxes punitive for businesses in your context?",
-    weight: 3,
+    weight: 2,
     tier: "additive",
     options: yn(false),
   },
@@ -114,6 +114,15 @@ const BASE: BaseLever[] = [
     question:
       "Is there a good business ecosystem in your location for your industry?",
     weight: 3,
+    tier: "additive",
+    options: yn(true),
+  },
+  {
+    id: "business-culture",
+    category: "Environmental",
+    question:
+      "Does the culture in the city you work in support good business practices such as punctuality, hard work, honesty, and trust?",
+    weight: 2,
     tier: "additive",
     options: yn(true),
   },
@@ -136,7 +145,7 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question:
       "Does reaching your target group require moving your business location away from where you live, where your business type normally operates, or somewhere pleasant to be?",
-    weight: 3,
+    weight: 1,
     tier: "additive",
     options: [
       { label: "No — they're where we naturally live and operate", intensity: 0 },
@@ -149,7 +158,7 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question:
       "How intense is political/religious surveillance of foreigners and religious activity in your context?",
-    weight: 3,
+    weight: 2,
     tier: "multiplier",
     note: "A capacity multiplier: constant background load on nearly every other lever.",
     options: [
@@ -164,7 +173,7 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question:
       "How much friction exists in banking, forex, and moving money in and out of the country?",
-    weight: 3,
+    weight: 1,
     tier: "additive",
     options: [
       { label: "Frictionless", intensity: 0 },
@@ -178,7 +187,7 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question:
       "How reliable are power, internet, and logistics infrastructure where you operate?",
-    weight: 3,
+    weight: 2,
     tier: "additive",
     options: [
       { label: "Fully reliable", intensity: 0 },
@@ -192,7 +201,7 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question:
       "How well does the location fit your family — schooling, spouse's life and visa, healthcare?",
-    weight: 3,
+    weight: 4,
     tier: "multiplier",
     note: "Family capacity is often the true ceiling, not founder capacity.",
     options: [
@@ -222,7 +231,7 @@ const BASE: BaseLever[] = [
     id: "founded-before",
     category: "Personal",
     question: "Have you founded a business before?",
-    weight: 3,
+    weight: 2,
     tier: "additive",
     options: yn(true),
   },
@@ -331,13 +340,11 @@ const BASE: BaseLever[] = [
   {
     id: "partners",
     category: "Business",
-    question: "Do you have founding partners?",
-    weight: 3,
+    question: "Do you have a founding partner? (Assume alignment.)",
+    weight: 4,
     tier: "additive",
-    note: "Partners spread load but add alignment cost.",
     options: [
-      { label: "Yes, aligned and complementary", intensity: 0 },
-      { label: "Yes, but alignment is untested", intensity: 2 },
+      { label: "Yes", intensity: 0 },
       { label: "No — solo founder", intensity: 3 },
     ],
   },
@@ -345,7 +352,7 @@ const BASE: BaseLever[] = [
     id: "known-customer",
     category: "Business",
     question:
-      "Do you already know a large customer for your business who is not in your family?",
+      "Do you already have a large customer for your business who is not a family member? Or do you have a \"fishing hole\" at your disposal of hungry first fans — a set of customers or a network already primed and waiting to buy?",
     weight: 3,
     tier: "additive",
     options: yn(true),
@@ -374,29 +381,33 @@ const BASE: BaseLever[] = [
       { label: "No subsidies — directly market-driven", intensity: 3 },
       {
         label:
-          "Some customers raise money to pay for the service, or are non-profits with a similar vision",
+          "Partly donor-touched — some customers raise donor money to pay for the service, or are non-profits with a similar vision",
         intensity: 2,
       },
-      { label: "We directly subsidize the business with outside funds", intensity: 1 },
+      {
+        label:
+          "Donor-subsidized — we directly subsidize the business with donor or outside funds",
+        intensity: 1,
+      },
     ],
   },
   {
     id: "ownership",
     category: "Business",
     question: "Do you own the business, or is it owned by someone else?",
-    weight: 3,
+    weight: 1,
     tier: "additive",
     options: [
-      { label: "I own it (or with partners)", intensity: 0 },
+      { label: "I own it — my money and personal guarantee are on the line", intensity: 3 },
       { label: "Shared with outside owners", intensity: 2 },
-      { label: "Owned by someone else", intensity: 3 },
+      { label: "Owned by someone else — their money, their problems", intensity: 0 },
     ],
   },
   {
     id: "franchise",
     category: "Business",
     question: "Is this a franchise/proven playbook, or your own idea?",
-    weight: 3,
+    weight: 2,
     tier: "additive",
     options: [
       { label: "Franchise or proven playbook", intensity: 0 },
@@ -434,7 +445,7 @@ const BASE: BaseLever[] = [
     category: "Business",
     question:
       "Do you understand your supply chain and have good access to it (vendors, service providers)?",
-    weight: 3,
+    weight: 2,
     tier: "additive",
     options: yn(true),
   },
@@ -442,13 +453,17 @@ const BASE: BaseLever[] = [
     id: "model-complexity",
     category: "Business",
     question:
-      "How complex is your business model? Does each business-model-canvas square take a sentence, or two paragraphs?",
-    weight: 3,
+      "How hard is your business model to execute? Could one person with a laptop and a piece of software run it, or does it take many vendors and programs, a complicated fee structure, and ten hires just to get off the ground?",
+    weight: 2,
     tier: "additive",
     options: [
-      { label: "A sentence per square", intensity: 0 },
-      { label: "A paragraph per square", intensity: 2 },
-      { label: "Two paragraphs per square", intensity: 4 },
+      { label: "Simple — a laptop, a tool or two, easy to explain", intensity: 0 },
+      { label: "Moderate — several vendors, tools, and early hires", intensity: 2 },
+      {
+        label:
+          "Complex — many vendors and programs, complicated fees, or a big team just to launch",
+        intensity: 4,
+      },
     ],
   },
   {
@@ -469,7 +484,7 @@ const BASE: BaseLever[] = [
     id: "physical-digital",
     category: "Business",
     question: "Is your deliverable physical or digital/service?",
-    weight: 3,
+    weight: 2,
     tier: "additive",
     note: "Physical products drag in supply chain, QC, logistics, and working-capital levers all at once.",
     options: [
@@ -485,7 +500,7 @@ const BASE: BaseLever[] = [
     id: "team",
     category: "Transformational",
     question: "Do you have a team for the transformational side of the work?",
-    weight: 3,
+    weight: 5,
     tier: "additive",
     options: yn(true),
   },
@@ -506,7 +521,7 @@ const BASE: BaseLever[] = [
     id: "hire-majority",
     category: "Transformational",
     question:
-      "Are you able to hire and employ mostly people from your target culture?",
+      "Are you able to hire and employ mostly people from your target people group?",
     weight: 3,
     tier: "additive",
     options: yn(true),
@@ -524,7 +539,7 @@ const BASE: BaseLever[] = [
     id: "giftedness",
     category: "Transformational",
     question:
-      "Are you gifted for the kind of transformational work your model requires?",
+      "Are you gifted for the kind of transformational work your model and team require?",
     weight: 3,
     tier: "additive",
     options: yn(true),
@@ -533,8 +548,8 @@ const BASE: BaseLever[] = [
     id: "org-alignment",
     category: "Transformational",
     question:
-      "Does your organization support your specific type of work, and are you in line with it?",
-    weight: 3,
+      "Does your organization support your specific type and flavor of work, and are you in line with it?",
+    weight: 2,
     tier: "additive",
     options: yn(true),
   },
@@ -543,7 +558,7 @@ const BASE: BaseLever[] = [
     category: "Transformational",
     question:
       "Does your team have a clearly articulated flavor of B4T, or is it still vague?",
-    weight: 3,
+    weight: 2,
     tier: "additive",
     options: [
       { label: "Clearly articulated and shared", intensity: 0 },
@@ -556,26 +571,26 @@ const BASE: BaseLever[] = [
     id: "product-love",
     category: "Business",
     question:
-      "Do you love the quality and beauty of what you sell, or is it utilitarian to you?",
-    weight: 3,
+      "How much do you love what you sell and need it to be perfect — do you hold it to demanding standards, or is it utilitarian to you?",
+    weight: 1,
     tier: "additive",
     options: [
-      { label: "I love it — craft matters to me", intensity: 0, spectrum: 20 },
-      { label: "It's fine", intensity: 1, spectrum: 50 },
-      { label: "Purely utilitarian", intensity: 2, spectrum: 75 },
+      { label: "Purely utilitarian — good enough is good enough", intensity: 0 },
+      { label: "I care about quality but ship pragmatically", intensity: 1 },
+      { label: "I love it — it must be excellent, and I feel every flaw", intensity: 3 },
     ],
   },
   {
     id: "visibility",
     category: "Transformational",
     question:
-      "How much of your business's daily operations — office work, service delivery, product creation — happens in front of local people?",
-    weight: 3,
+      "How much of your business's daily operations — office work, service delivery, product creation — happens in front of local people? Can you work from home or a private office? Do you have access to good coffee?",
+    weight: 1,
     tier: "additive",
     options: [
-      { label: "Highly visible — shopfront, factory floor", intensity: 3, spectrum: 25 },
-      { label: "Partly visible", intensity: 2, spectrum: 50 },
-      { label: "Mostly invisible (export, online)", intensity: 1, spectrum: 70 },
+      { label: "Highly visible — shopfront, factory floor", intensity: 3 },
+      { label: "Partly visible", intensity: 2 },
+      { label: "Mostly invisible (export, online, home office)", intensity: 1 },
     ],
   },
 ];
@@ -703,6 +718,23 @@ const META: Record<string, LeverMeta> = {
       ],
     },
   },
+  "business-culture": {
+    name: "Business culture",
+    description:
+      "Measures whether the surrounding culture supports good business practices — punctuality, hard work, honesty, and trust. Where these are weak, every hire, contract, and delivery carries a hidden management tax that the founder pays personally.",
+    prosCons: {
+      up: [
+        "Appointments, deadlines, and agreements are treated as suggestions",
+        "Verification and follow-up consume hours on every commitment",
+        "Trust must be built from zero and guarded constantly",
+      ],
+      down: [
+        "People show up when they say they will and do what they agreed",
+        "Contracts and handshakes mostly hold without policing",
+        "Management energy goes into growth, not enforcement",
+      ],
+    },
+  },
   "proven-locally": {
     name: "Local proof",
     description:
@@ -774,7 +806,7 @@ const META: Record<string, LeverMeta> = {
   infrastructure: {
     name: "Infrastructure reliability",
     description:
-      "Measures how dependable power, internet, and logistics are where you operate. Unreliable infrastructure forces you to buy redundancy — generators, backup links, buffer stock — which quietly inflates the capital the model needs.",
+      "Measures how dependable power, internet, and logistics are where you operate. Unreliable infrastructure forces you to buy redundancy — generators, backup links, buffer stock — which quietly inflates the capital the model needs. You also may need to account for days where productivity drops in half, or even completely.",
     prosCons: {
       up: [
         "Generators, backup links, and buffer stock are mandatory line items",
@@ -827,142 +859,153 @@ const META: Record<string, LeverMeta> = {
   "founded-before": {
     name: "Founder experience",
     description:
-      "Measures whether you've built a business before. A first venture means learning founding itself — pricing, hiring, firing, cash discipline — at the same time as learning a new culture, language, and security environment.",
+      "Measures whether you've built a business before. Like your context, this is a given, not a choice: a first venture means learning founding itself — pricing, hiring, firing, cash discipline — at the same time as a new culture and language.",
     prosCons: {
       up: [
-        "First-time founders bring energy and no bad habits",
-        "The learning curve is survivable with good coaching and a simple model",
+        "Founding basics are being learned for the first time, in a foreign context",
+        "Every pricing, hiring, and cash mistake is paid at full tuition",
+        "Cash trouble is spotted late because the warning signs are unfamiliar",
       ],
       down: [
-        "Prior founding compresses years of expensive lessons into instinct",
-        "Cross-cultural founding is a hard place to learn founding basics",
-        "Experienced founders spot cash trouble months earlier",
+        "Years of expensive lessons are already compressed into instinct",
+        "The founding playbook is familiar — only the context is new",
+        "Trouble is recognized months earlier, while it's still cheap to fix",
       ],
     },
   },
   "sales-experience": {
     name: "Sales experience",
     description:
-      "Measures whether you've sold before. Sales is the function most founders underestimate and the one no B4T business survives without — someone has to bring in revenue, and in the early years that someone is you.",
+      "Measures whether you've sold before. Sales is the function most founders underestimate and the one no B4T business survives without — in the early years, the founder is the sales force, ready or not.",
     prosCons: {
       up: [
-        "Selling can be learned by doing if the model tolerates a slow ramp",
-        "Technical founders can pair with a sales-gifted partner or hire",
+        "Selling is being learned on the job, in a second culture",
+        "Revenue ramps slowly while the skill develops",
+        "Rejection and negotiation drain more energy than they should",
       ],
       down: [
-        "Revenue is the business's oxygen and sales skill is the pump",
-        "Cross-cultural selling is harder than home-market selling, not easier",
-        "Donor-backed founders can drift for years without confronting weak sales",
+        "Prospecting, pitching, and closing are already muscle memory",
+        "Revenue starts moving early because someone knows how to ask for it",
+        "Cross-cultural selling builds on a solid home-market foundation",
       ],
     },
   },
   "industry-experience": {
     name: "Industry experience",
     description:
-      "Measures whether you've worked in this industry before. Industry veterans know the margins, the failure modes, and the suppliers by name; outsiders must buy that knowledge with time and mistakes.",
+      "Measures whether you've worked in this industry before. Veterans know the margins, the failure modes, and the suppliers by name; outsiders buy that knowledge with time and mistakes.",
     prosCons: {
       up: [
-        "Outsiders sometimes disrupt industries insiders have stopped questioning",
-        "Passion for a new field can outlast the grind better than familiarity",
+        "Margins, failure modes, and supplier norms are all discovered by experience",
+        "Credibility with customers and vendors must be earned from zero",
+        "Whether the margins can support the mission is still an open question",
       ],
       down: [
-        "Industry fluency removes an entire class of expensive surprises",
+        "The industry's expensive surprises are already known",
         "Credibility with suppliers and customers arrives on day one",
-        "You already know whether the margins can support the mission",
+        "You already know what 'normal' costs, margins, and timelines look like",
       ],
     },
   },
   coach: {
     name: "Coaching",
     description:
-      "Measures whether you have a coach — someone with authority to ask hard questions on a regular rhythm. B4T founders operate far from oversight, and unexamined drift (in the business or the mission) is the default, not the exception.",
+      "Measures whether you have a coach — someone with permission to ask hard questions on a regular rhythm. B4T founders operate far from oversight, and unexamined drift in the business or the mission is the default, not the exception.",
     prosCons: {
       up: [
-        "Going without frees you from another reporting relationship",
-        "Some seasons genuinely lack access to a good coach",
+        "No regular outside voice examines your decisions or your drift",
+        "Blind spots grow quietly until they surface as crises",
+        "Isolation, authority, and stress accumulate with no release valve",
       ],
       down: [
-        "A coach catches founder blind spots before they become crises",
-        "Regular external perspective keeps business and mission honestly weighed",
-        "Isolation plus authority plus stress is exactly when leaders go sideways",
+        "A trusted voice asks the hard questions on a schedule",
+        "Business and mission get honestly weighed by someone outside both",
+        "Founder blind spots get caught while they're still small",
       ],
     },
   },
   advisors: {
     name: "Industry advisors",
     description:
-      "Measures whether you can reach people who know your specific industry well enough to sanity-check your numbers and decisions. Generic business advice abounds; industry-specific counsel is what actually prevents pricing and sourcing mistakes.",
+      "Measures whether you can reach people who know your specific industry well enough to sanity-check your numbers and decisions. Generic business advice abounds; industry-specific counsel is what prevents pricing and sourcing mistakes.",
     prosCons: {
       up: [
-        "Building without advisors keeps you nimble and forces first-principles thinking",
-        "In frontier industries, no relevant advisors may exist yet",
+        "Numbers and decisions go unchecked by anyone who knows the industry",
+        "Five-figure mistakes happen that one phone call would have prevented",
+        "The network into suppliers, customers, and hires must be built alone",
       ],
       down: [
-        "One experienced advisor call can save a five-figure mistake",
-        "Advisors extend your network into suppliers, customers, and hires",
+        "Pricing and sourcing decisions get sanity-checked before they're expensive",
+        "Advisors open doors to suppliers, customers, and hires",
+        "Someone can tell you whether your plan is normal or naive",
       ],
     },
   },
   "skill-model-match": {
     name: "Skill-to-model match",
     description:
-      "Measures whether the bottleneck function of your business model — sales, operations, craft, finance — matches your strongest gifting. A mismatched founder runs the machine permanently hot, doing their weakest work at the most critical point.",
+      "Measures whether the bottleneck function of your business model — sales, operations, craft, finance — matches your strongest gifting. Your gifting is largely fixed; when it mismatches the model's critical function, the machine runs permanently hot.",
     prosCons: {
       up: [
-        "Stretching into a weak area can grow you if the gap is adjacent, not opposite",
-        "A strong early hire can cover the bottleneck if capital allows",
+        "The business's make-or-break function is your weakest work",
+        "Every critical day is spent outside your gifting — a burnout formula",
+        "Covering the gap depends on hiring talent you may not find or afford",
       ],
       down: [
-        "The bottleneck function is where the business lives or dies — put your strength there",
-        "Permanent operation outside your gifting is a burnout formula",
-        "Hiring your way out assumes talent and money you may not have",
+        "The bottleneck function is exactly where your strength lives",
+        "Your best energy goes to the work that matters most",
+        "Weaker functions can be hired or systematized at leisure",
       ],
     },
   },
   "hours-desired": {
     name: "Hours committed",
     description:
-      "Measures the gap between the hours the business needs and the hours you intend to give it. Founders who plan under 30 hours a week — often to protect ministry time — are asking the business to grow on part-time fuel, which is an intensity trap.",
+      "Measures the gap between the hours the business needs and the hours you intend to give it. Founders who plan under 30 hours a week — often to protect ministry time — are asking the business to grow on part-time fuel.",
     prosCons: {
       up: [
-        "Full commitment is what real businesses require — and locals can tell",
-        "The business is the ministry platform; starving it starves both",
+        "The business is asked to grow on part-time founder fuel",
+        "Ambition and available hours pull in opposite directions",
+        "Locals notice when the boss treats the business as a side project",
       ],
       down: [
-        "Protected non-business hours can guard family and direct ministry",
-        "Some mature or simple models genuinely run on fewer founder hours",
-        "Sustainable pace beats heroic pace over a 10-year horizon",
+        "The business gets the full working hours a real venture requires",
+        "Growth expectations and founder input actually match",
+        "Commitment is visible to staff, customers, and officials",
       ],
     },
   },
   timeline: {
     name: "Time horizon",
     description:
-      "Measures how long you expect to spend building. Businesses in hard places take longer than businesses at home, and transformational fruit takes longer still; a short horizon forces shortcuts in exactly the areas that can't be shortcut.",
+      "Measures how long you expect to spend building. Businesses in hard places take longer than at home, and transformational fruit takes longer still; a short horizon forces shortcuts in exactly the areas that can't be shortcut.",
     prosCons: {
       up: [
-        "Urgency concentrates effort and forces early market validation",
-        "Short commitments are easier to recruit family and partners into",
+        "The plan needs results faster than trust and fluency can grow",
+        "Shortcuts get forced in areas that punish shortcuts",
+        "Local staff hold back from a leader they suspect is leaving soon",
       ],
       down: [
-        "Trust, fluency, and profitability all compound on 7+ year timelines",
-        "A 2-year plan in a 7-year context guarantees leaving before the fruit",
-        "Local staff invest in leaders they believe are staying",
+        "Trust, fluency, and profitability get the years they actually take",
+        "Staff and partners invest because you're clearly staying",
+        "Slow seasons are absorbed instead of triggering panic",
       ],
     },
   },
   "paycheck-5yr": {
     name: "Paycheck dependence",
     description:
-      "Measures whether the business must pay you within five years. Needing income raises pressure and forces commercial discipline; not needing it removes pressure but can quietly erode the realness the whole strategy depends on.",
+      "Measures whether the business must pay you within five years. Needing income raises the pressure on every decision; the business has to work commercially on a clock, not just eventually.",
     prosCons: {
       up: [
-        "Needing the paycheck forces the market honesty that makes B4T credible",
-        "A business that supports its founder is proven, not subsidized",
+        "The family's income rides on the business succeeding on schedule",
+        "Slow quarters are felt at the dinner table",
+        "Pressure pushes toward short-term revenue over right strategy",
       ],
       down: [
-        "Outside funding buys patience in slow-trust, long-cycle markets",
-        "Income pressure can push you into short-term revenue over right strategy",
+        "Income comes from elsewhere while the business finds its feet",
+        "Slow-trust, long-cycle markets can be served with patience",
+        "Strategic decisions aren't hostage to next month's rent",
       ],
     },
   },
@@ -971,95 +1014,137 @@ const META: Record<string, LeverMeta> = {
   capital: {
     name: "Capitalization",
     description:
-      "Measures your funding relative to what the model actually needs — including the buffer for the surprises hard contexts guarantee. Undercapitalization doesn't usually kill businesses outright; it forces a chain of desperate decisions that do.",
+      "Measures your funding relative to what the model actually needs — including the buffer for the surprises hard contexts guarantee. Undercapitalization rarely kills a business outright; it forces the chain of desperate decisions that does.",
     prosCons: {
       up: [
-        "Lean starts force frugality and fast validation",
-        "Less capital at risk means less lost if the model needs a pivot",
+        "Runway is tight and every surprise is a small crisis",
+        "Decisions get made desperate — discounting, cutting corners, bad hires",
+        "The visa delay, the raid, or the lost container has no financial shock absorber",
       ],
       down: [
-        "Runway is decision quality — desperate founders make bad calls",
-        "Hard contexts always cost more than the spreadsheet says",
-        "A buffer lets you survive the visa delay, the raid, the lost container",
+        "The model is funded through to revenue with a real buffer",
+        "Surprises are absorbed as costs, not emergencies",
+        "Decisions stay strategic because nobody is panicking",
       ],
     },
   },
   partners: {
-    name: "Founding partners",
+    name: "Founding partner",
     description:
-      "Measures whether you're building alone or with partners. Partners spread the load and cover skill gaps, but add alignment cost — and misaligned partners in a stressed cross-cultural setting are their own crisis.",
+      "Measures whether you carry the venture alone or with a partner (alignment assumed). A partner spreads the daily and emotional load; going solo keeps things lean and fast, which can be the right call for a simple model or an extreme setting — but it costs intensity.",
     prosCons: {
       up: [
-        "Solo founding means total clarity of vision and speed of decision",
-        "No partner conflict risk — the most common startup killer after cash",
+        "Every decision, crisis, and absence lands on one person",
+        "No complementary skill set covers your gaps",
+        "The business stops when you stop — illness, visa runs, furlough",
+        "Solo can still be right: lean, simple, fast-moving, no coordination overhead",
       ],
       down: [
-        "Aligned partners cover your skill gaps and share the emotional load",
-        "Someone can mind the business during your visa runs and family emergencies",
-        "Shared burden is sustainability insurance in high-intensity contexts",
+        "The load — practical and emotional — is genuinely shared",
+        "A partner covers the functions you're weakest in",
+        "Someone minds the shop when life interrupts",
       ],
     },
   },
   "known-customer": {
-    name: "Anchor customer",
+    name: "Anchor customers",
     description:
-      "Measures whether you already know a large customer — outside your family — before you build. A real anchor customer converts the riskiest assumption in the whole model (will anyone pay?) into a known fact.",
+      "Measures whether real buyers are already waiting — a large committed customer outside the family, or a \"fishing hole\": a set of customers or a network already primed to buy. Ready demand converts the riskiest assumption in the model (will anyone pay?) into a known fact.",
     prosCons: {
       up: [
-        "Building without one keeps you honest about serving a whole market",
-        "Anchor dependence can distort the product toward one buyer's needs",
+        "Every customer must be found, convinced, and won cold",
+        "Demand is a hope until the first strangers pay",
+        "Marketing and sales consume the runway before revenue arrives",
       ],
       down: [
-        "A committed first customer de-risks the model more than any plan",
-        "Early revenue shortens the runway to sustainability",
-        "One reference customer unlocks the next ten",
+        "A committed customer or hungry network is waiting at launch",
+        "Early revenue flows while others are still pitching",
+        "First fans become the reference that unlocks the next ten customers",
+      ],
+    },
+  },
+  "target-customer": {
+    name: "Customer understanding",
+    description:
+      "Measures how deeply you understand the needs of the customer you're serving. Founders who are their own target customer carry an instinctive feel for the product; others must build that understanding through research, conversation, and iteration.",
+    prosCons: {
+      up: [
+        "The customer's real needs are learned by trial, error, and lost sales",
+        "Product decisions are guesses filtered through secondhand reports",
+        "Slow drift into irrelevance can go unnoticed for a long time",
+      ],
+      down: [
+        "You want or need the product yourself — instinct comes built in",
+        "Selling is authentic because you genuinely believe the pitch",
+        "Product drift gets caught early because you'd feel it as a customer",
+      ],
+    },
+  },
+  "donor-subsidy": {
+    name: "Revenue funding mix",
+    description:
+      "Measures how much donor money stands behind the business's revenue — none, some (donor-backed customers or mission-aligned non-profits), or direct subsidy. Donor funding lowers cash-flow intensity: the more of it, the less the market alone must carry. The trade is dependence on funding cycles outside your control.",
+    prosCons: {
+      up: [
+        "The open market alone must carry every cost, on time, every month",
+        "Slow seasons hit cash immediately — no cushion behind revenue",
+        "Commercial pressure shapes every decision, for better and worse",
+      ],
+      down: [
+        "Donor funds cushion cash flow and buy patience with slow markets",
+        "The gap between launch and sustainability is bridged deliberately",
+        "Lower cash pressure frees capacity for people and long-term work",
       ],
     },
   },
   ownership: {
     name: "Ownership stake",
     description:
-      "Measures whether you own the business you're pouring yourself into. Ownership aligns risk, reward, and authority; running someone else's business means your strategic calls — including mission-critical ones — need someone else's sign-off.",
+      "Measures whose money and name are on the line. Owning the business means your capital and personal guarantee carry the risk — high intensity. Running someone else's business means someone else's money, someone else's problems.",
     prosCons: {
       up: [
-        "Full ownership gives you the authority your transformational strategy needs",
-        "Owners can hold the long timeline; hired managers get measured quarterly",
+        "Your savings and personal guarantee absorb every loss",
+        "A bad year is a family financial event, not just a business one",
+        "Walking away isn't an option you can afford",
       ],
       down: [
-        "Outside owners bring capital and experience you may lack",
-        "Local ownership structures can be legally required or strategically wise",
+        "Someone else's capital carries the downside",
+        "Failure costs you a job, not your savings",
+        "Risk decisions can be made with a clear head",
       ],
     },
   },
   franchise: {
     name: "Model provenance",
     description:
-      "Measures whether you're running a proven playbook or your own idea. A franchise or established model means the fundamental question — does this work? — is already answered; an original idea means you're answering it in a hard market.",
+      "Measures whether you're running a proven playbook or your own idea. A franchise or established model means the fundamental question — does this work? — is already answered; an original idea means answering it in a hard market.",
     prosCons: {
       up: [
-        "Original ideas can fit the local context in ways no imported playbook does",
-        "Your own model means no royalties and no external constraints",
+        "The core question — does this even work? — is still unanswered",
+        "Systems, pricing, and processes are invented as you go",
+        "Every mistake is original because nobody wrote the manual",
       ],
       down: [
-        "Proven playbooks eliminate whole categories of fatal unknowns",
+        "The playbook exists — execution is the only question",
         "Documented systems free founder attention for people and mission",
-        "Franchise support networks substitute for missing local ecosystems",
+        "Support networks and benchmarks substitute for missing local ecosystems",
       ],
     },
   },
   innovation: {
     name: "Innovation ambition",
     description:
-      "Measures how novel your product or service is trying to be. Every step past a proven offer adds market education cost — and educating a market takes exactly the time, money, and energy that B4T contexts already tax heavily.",
+      "Measures how novel your product or service is trying to be. Every step past a proven offer adds market-education cost — and educating a market takes exactly the time, money, and energy that B4T contexts already tax heavily.",
     prosCons: {
       up: [
-        "Real innovation can create an uncontested market position",
-        "Category creation can serve needs no existing offer touches",
+        "Customers must be taught what the product even is before they'll buy",
+        "Innovation risk stacks on top of context risk — you carry both",
+        "Feedback loops are slow because nothing comparable exists locally",
       ],
       down: [
-        "Known offers sell without expensive market education",
-        "Innovation risk stacks on top of context risk — you're carrying both",
-        "Proven demand lets you focus energy on execution and people",
+        "Customers already understand and want what's being sold",
+        "Energy goes into execution and people, not market education",
+        "Demand is proven, so failure modes are operational, not existential",
       ],
     },
   },
@@ -1069,14 +1154,14 @@ const META: Record<string, LeverMeta> = {
       "Measures the size you're aiming for. Bigger employers create more jobs and more transformational surface area, but scale multiplies management load, capital needs, and — in sensitive contexts — visibility to the state.",
     prosCons: {
       up: [
-        "More employees means more lives touched daily — the core B4T logic",
-        "Scale brings local economic weight and legitimacy that protect you",
-        "Larger businesses can develop local leaders into real management",
+        "Every ten employees adds a new tier of management complexity",
+        "Capital needs and fixed costs grow ahead of revenue",
+        "A high profile draws official attention in sensitive places",
       ],
       down: [
-        "Every ten employees is a new tier of management complexity",
-        "High profile attracts scrutiny in surveillance-heavy contexts",
-        "Small and profitable beats large and fragile",
+        "A small operation stays manageable by one or two people",
+        "Low profile means low scrutiny",
+        "Profitability can come before headcount",
       ],
     },
   },
@@ -1086,95 +1171,82 @@ const META: Record<string, LeverMeta> = {
       "Measures whether you understand and can reliably access your supply chain — vendors, materials, service providers. In thin markets, a single unreliable supplier can idle the whole business, and alternatives may be a border away.",
     prosCons: {
       up: [
-        "Building new supplier relationships creates exactly the local ties B4T wants",
-        "Vertical integration of a weak link can become its own revenue line",
+        "Key inputs depend on suppliers you don't yet know or trust",
+        "A single vendor failure can idle the whole operation",
+        "Import dependencies stack customs and forex risk onto daily operations",
       ],
       down: [
-        "Known suppliers mean predictable cost, quality, and delivery",
-        "Supply blind spots surface as customer-facing failures",
-        "Import dependencies stack customs and forex risk onto operations",
+        "Suppliers are known, tested, and reachable",
+        "Cost, quality, and delivery are predictable enough to promise customers",
+        "Backup options exist when a vendor fails",
       ],
     },
   },
   "model-complexity": {
-    name: "Model complexity",
+    name: "Execution complexity",
     description:
-      "Measures how complicated your business model is — whether each business-model-canvas square takes a sentence or two paragraphs. Complexity is a permanent overhead: every moving part must be managed in a second language under scrutiny.",
+      "Measures how hard the model is to execute day to day. One person with a laptop and a single tool is one life; fifty vendors, twenty programs, a complicated fee structure, and ten hires just to launch is another. Complexity is permanent overhead — every moving part gets managed in a second language.",
     prosCons: {
       up: [
-        "Complex models can be defensible precisely because they're hard to copy",
-        "Some real local needs simply require complex solutions",
+        "Many vendors, tools, and hires must work before the first sale",
+        "The fee structure or offering takes real effort just to explain",
+        "Every moving part is one more thing that breaks in a hard context",
       ],
       down: [
-        "Simple models leave founder capacity for language, family, and mission",
-        "Every extra moving part is another thing that breaks in a hard context",
-        "Staff can actually run a simple model without you — the succession test",
+        "A laptop and a tool or two run the whole model",
+        "Anyone can understand the offer in a sentence",
+        "Staff could run it without you — the succession test passes",
       ],
     },
   },
   "cash-cycle": {
     name: "Cash cycle",
     description:
-      "Measures the time between spending money and getting paid. Long cash conversion cycles demand working capital and nerve; in economies with weak contract enforcement, a 90-day receivable is a hope, not an asset.",
+      "Measures the time between spending money and getting paid. Long cash-conversion cycles demand working capital and nerve; in economies with weak contract enforcement, a 90-day receivable is a hope, not an asset.",
     prosCons: {
       up: [
-        "Long-cycle B2B work often has better margins and stickier customers",
-        "Financing the cycle is possible if capitalization is genuinely strong",
+        "Months pass between paying costs and seeing revenue",
+        "Receivables are collection gambles where courts are weak",
+        "Cash pressure compounds every other stressor on the founder",
       ],
       down: [
-        "Cash businesses self-fund growth and survive shocks",
-        "Weak courts make long receivables a collection gamble",
-        "Cash pressure compounds every other stressor on the founder",
+        "Money comes in within days of going out",
+        "Growth self-funds instead of borrowing against hope",
+        "Shocks are survivable because cash is always near",
       ],
     },
   },
   "physical-digital": {
     name: "Physical vs digital",
     description:
-      "Measures how physical your deliverable is. Physical products drag in supply chain, quality control, logistics, and working capital simultaneously — a lever that silently pulls four others with it.",
+      "Measures how physical your deliverable is. Physical products drag in supply chain, quality control, logistics, and working capital simultaneously — one lever that silently pulls four others with it.",
     prosCons: {
       up: [
-        "Physical businesses are visible, legible, and legitimate to officials and neighbors",
-        "Factories and shops employ the many; digital shops employ the few",
-        "Tangible products fit markets where digital trust is low",
+        "Inventory, logistics, QC, and working capital all activate at once",
+        "Customs, spoilage, and breakage are recurring line items",
+        "Regulatory touchpoints multiply with every physical step",
       ],
       down: [
-        "Digital models sidestep customs, spoilage, and inventory capital",
-        "Service businesses can start smaller and pivot faster",
-        "Physical operations multiply regulatory touchpoints",
+        "No inventory, no customs, no spoilage",
+        "The business can start small and pivot fast",
+        "Capital goes to people instead of stock",
       ],
     },
   },
-
-  "target-customer": {
-    name: "Customer understanding",
+  "product-love": {
+    name: "Craft standards",
     description:
-      "Measures how deeply you understand the needs of the customer you're serving. Founders who are their own target customer carry an instinctive feel for the product; others build that understanding through research, conversation, and iteration.",
+      "Measures how much you love what you sell and need it to be perfect. Loving your product and demanding high standards raises intensity — you have a little darling, and every compromise hurts. A utilitarian product ships when it's good enough.",
     prosCons: {
       up: [
-        "Serving a customer unlike yourself can open markets others overlook",
-        "Learning the customer deliberately builds listening habits that serve the whole business",
+        "Every flaw is felt personally — 'good enough' is never good enough",
+        "Perfectionism slows shipping and inflates costs",
+        "The product is a little darling that resists necessary compromises",
       ],
       down: [
-        "Being your own customer gives instant product instinct and authentic selling",
-        "Deep customer understanding prevents slow product drift into irrelevance",
-      ],
-    },
-  },
-  "donor-subsidy": {
-    name: "Revenue funding mix",
-    description:
-      "Measures where the money that funds the business comes from — the open market, mission-aligned buyers, or outside funds. This is a cash-flow and sustainability question as much as a philosophical one: each funding mix carries its own pressures and its own freedoms.",
-    prosCons: {
-      up: [
-        "Market-driven revenue proves the model can stand on its own",
-        "Commercial discipline sharpens every part of the operation",
-        "No dependence on funding cycles outside your control",
-      ],
-      down: [
-        "Outside funds can bridge the honest gap between launch and sustainability",
-        "Mission-aligned customers and funders let you serve markets that pay slowly",
-        "Lower cash pressure frees capacity for people and long-term work",
+        "Good enough ships on time and on budget",
+        "Standards follow the customer's needs, not the founder's feelings",
+        "Pivots don't have to fight sentiment",
       ],
     },
   },
@@ -1183,16 +1255,17 @@ const META: Record<string, LeverMeta> = {
   team: {
     name: "Transformational team",
     description:
-      "Measures whether you have a team for the transformational side of the work, or whether the founder is carrying business and mission alone. Solo spiritual labor alongside solo business labor is the classic B4T overload pattern.",
+      "Measures whether you have a team for the transformational side of the work, or whether the founder carries business and mission alone. Solo spiritual labor stacked on solo business labor is the classic B4T overload pattern.",
     prosCons: {
       up: [
-        "Starting alone lets you set culture before adding people to it",
-        "Teams add coordination and security overhead in sensitive places",
+        "One person carries the business all day and the mission all evening",
+        "Only one gifting reaches only the people it naturally reaches",
+        "Doctrine and strategy drift with nobody to check them",
       ],
       down: [
-        "A team sustains the mission when the business consumes the founder",
-        "Different giftings reach different people — no founder has them all",
-        "Shared discernment protects against solo drift in doctrine and strategy",
+        "The mission keeps moving when the business consumes the founder",
+        "Different giftings reach different people",
+        "Shared discernment guards against solo drift",
       ],
     },
   },
@@ -1202,76 +1275,65 @@ const META: Record<string, LeverMeta> = {
       "Measures whether your target people group already has the education and skills your business needs. A skills gap converts your hiring plan into a training institution — noble, transformational, and very expensive.",
     prosCons: {
       up: [
-        "Training people is transformation — skills change families' trajectories",
-        "Trained-by-you staff carry loyalty and shared culture",
+        "Every hire needs long training before they're productive",
+        "Training costs land exactly when the business is weakest",
+        "Quality wobbles for years while skills develop",
       ],
       down: [
-        "Skilled hires are productive in weeks, not years",
-        "Training costs land exactly when the business is weakest",
-        "Quality risk during the training years can sink customer trust",
+        "Hires are productive in weeks, not years",
+        "Quality is dependable from early on",
+        "Training budgets go to development, not survival",
       ],
     },
   },
   "hire-majority": {
-    name: "Target-culture hiring",
+    name: "Target-group hiring",
     description:
-      "Measures whether you can actually employ mostly people from your target culture. If legal, linguistic, or skills barriers push you toward hiring outside the community, the business succeeds while the strategy quietly fails.",
+      "Measures whether you can actually employ mostly people from your target people group. If legal, linguistic, or skills barriers push hiring outside the community, the business can succeed while the strategy quietly fails.",
     prosCons: {
       up: [
-        "Daily employment relationships are the deepest access B4T offers",
-        "Wages flowing into the community build durable goodwill",
+        "Barriers force hiring outside the community you came to serve",
+        "The deepest access B4T offers — daily work together — never materializes",
+        "Business success and mission success quietly diverge",
       ],
       down: [
-        "Mixed hiring may be commercially necessary to keep quality up",
-        "Concentrating one group can create local political friction",
-      ],
-    },
-  },
-  "locals-likeminded": {
-    name: "Like-minded locals",
-    description:
-      "Measures whether like-minded locals exist in your context — and are reachable through your network — for sensitive or strategic roles. This is a condition of the place more than a choice: without them, the most delicate parts of the work stay founder-dependent, capped at your capacity and your visa.",
-    prosCons: {
-      up: [
-        "No like-minded locals exist yet, or none you can reach",
-        "Every sensitive role rests on the founder indefinitely",
-        "The work's continuity is tied entirely to your presence",
-      ],
-      down: [
-        "Trusted locals are available for sensitive and strategic roles",
-        "A local partner reads situations you would always misread",
-        "The work can survive your departure",
+        "The team is drawn from the community itself",
+        "Wages and daily relationships flow where the mission points",
+        "Work becomes the natural context for everything else",
       ],
     },
   },
   giftedness: {
     name: "Transformational gifting",
     description:
-      "Measures whether your gifting matches the kind of transformational work your model requires. A model built around workplace discipleship needs a discipler; one built on community presence needs a connector — mismatches here mirror the business skill-match trap.",
+      "Measures whether your gifting matches the kind of transformational work your model and team require. A model built around workplace discipleship needs a discipler; one built on community presence needs a connector.",
     prosCons: {
       up: [
-        "Gifting can grow through practice when the gap is modest",
-        "Teams can cover what the founder lacks",
+        "The model demands ministry you're not naturally shaped for",
+        "Forced ministry style drains rather than energizes",
+        "The transformational engine depends on your weakest gear",
       ],
       down: [
-        "Working in your gifting is sustainable; working against it isn't",
-        "A model redesign is cheaper than a decade of forced ministry style",
+        "The transformational work flows out of who you already are",
+        "Ministry energizes rather than depletes",
+        "The model and the person reinforce each other",
       ],
     },
   },
   "org-alignment": {
     name: "Org alignment",
     description:
-      "Measures whether your sending organization supports your specific type of work and whether you're genuinely in line with it. Misalignment surfaces at the worst times — funding reviews, member care crises, security incidents — as friction and second-guessing.",
+      "Measures whether your sending organization supports your specific type and flavor of work, and whether you're genuinely in line with it. Misalignment surfaces at the worst times — funding reviews, member care crises, security incidents.",
     prosCons: {
       up: [
-        "Independence gives freedom to follow the strategy the context demands",
-        "Some orgs' policies genuinely don't fit real B4T",
+        "The org second-guesses the strategy at every review",
+        "Friction with your own people is a chronic energy leak",
+        "Crisis support falters because the org never understood the work",
       ],
       down: [
-        "Aligned orgs provide cover, care, and continuity you can't self-supply",
-        "Fighting your own organization is a chronic energy leak",
-        "Crisis support depends on the org understanding what you actually do",
+        "The org provides cover, care, and continuity you can't self-supply",
+        "Reviews strengthen the work instead of relitigating it",
+        "In a crisis, the people behind you actually understand what you do",
       ],
     },
   },
@@ -1281,44 +1343,31 @@ const META: Record<string, LeverMeta> = {
       "Measures whether your team has a clearly articulated flavor of B4T or is still running on vague intentions. Unarticulated philosophy doesn't stay neutral; it drifts toward whatever is easiest, and team members quietly diverge until a conflict reveals the gap.",
     prosCons: {
       up: [
-        "Early ambiguity leaves room to learn before locking positions",
-        "Over-defined philosophy can become rigidity in a shifting context",
+        "Each team member quietly carries a different definition of the work",
+        "Hiring, funding, and partnership decisions wobble without a shared test",
+        "The divergence surfaces as a conflict instead of a conversation",
       ],
       down: [
-        "Shared language prevents the slow divergence that splits teams",
-        "Clear philosophy makes hiring, funding, and partnership decisions fast",
-        "You can't evaluate the business's mission success against a vague target",
-      ],
-    },
-  },
-
-  "product-love": {
-    name: "Product love",
-    description:
-      "Measures whether you love the quality and beauty of what you sell or find it merely utilitarian. Craft-love sustains motivation through the grind years and shows up in quality that customers notice; utilitarian products get utilitarian effort.",
-    prosCons: {
-      up: [
-        "Loving the craft makes excellence natural rather than forced",
-        "Product passion is contagious to staff and customers alike",
-      ],
-      down: [
-        "Strategic product choice can trump personal taste for good reasons",
-        "Over-attachment to craft can resist necessary pivots",
+        "The team shares language for what the work is and isn't",
+        "Decisions get made fast against a clear philosophy",
+        "Mission success can actually be evaluated against a stated target",
       ],
     },
   },
   visibility: {
     name: "Local visibility",
     description:
-      "Measures how much of your business's daily operations — office work, service delivery, product creation — happens in front of local people. Visible daily work makes you legible and familiar to the community; low-visibility models trade that presence for privacy and flexibility.",
+      "Measures how much of your business's daily operations — office work, service delivery, product creation — happens in front of local people, versus from a home office with decent coffee. Visible daily work makes you legible to the community; it also puts you on stage all day, every day.",
     prosCons: {
       up: [
-        "Visible work answers 'what do you actually do?' before it's asked",
-        "Daily public presence generates organic relationships no strategy can",
+        "The workday happens on stage — shopfront, factory floor, public counter",
+        "Every interaction is cross-cultural and observed",
+        "There's no private office to retreat to between demands",
       ],
       down: [
-        "Low-profile models suit high-surveillance contexts",
-        "Export and online businesses can serve the mission without the exposure",
+        "Work happens from home or a private office, on your own terms",
+        "Energy is spent on the work itself, not on being watched",
+        "Good coffee is within reach",
       ],
     },
   },

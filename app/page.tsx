@@ -127,10 +127,7 @@ export default function Page() {
           {catLevers.map((l) => (
             <div className="q" key={l.id}>
               <p className="qtext">{l.question}</p>
-              <p className="wt">
-                Weight {l.weight}
-                {l.tier === "multiplier" ? " · capacity multiplier" : ""}
-              </p>
+              <p className="wt">Weight {l.weight}</p>
               <div className="opts" role="radiogroup" aria-label={l.question}>
                 {l.options.map((o, i) => (
                   <button

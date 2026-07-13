@@ -182,10 +182,7 @@ function LeverRow({
       >
         <span className={`chip chip-${lever.category.toLowerCase()}`} aria-hidden />
         <span className="lrow-name">{lever.name}</span>
-        <span className="lrow-wt">
-          Weight {lever.weight}
-          {lever.tier === "multiplier" ? " · multiplier" : ""}
-        </span>
+        <span className="lrow-wt">Weight {lever.weight}</span>
         <span className={`lrow-val ${hot ? "hot" : ""}`}>{value}</span>
         <span className="lrow-caret" aria-hidden>
           {open ? "−" : "+"}
@@ -198,9 +195,7 @@ function LeverRow({
             <div className="lrow-pros">
               <div>
                 <h4>
-                  {lever.category === "Environmental"
-                    ? "High intensity looks like"
-                    : "Why pull it up"}
+                  High intensity looks like
                 </h4>
                 <ul>
                   {lever.prosCons.up.map((p, i) => (
@@ -210,9 +205,7 @@ function LeverRow({
               </div>
               <div>
                 <h4>
-                  {lever.category === "Environmental"
-                    ? "Low intensity looks like"
-                    : "Why ease it down"}
+                  Low intensity looks like
                 </h4>
                 <ul>
                   {lever.prosCons.down.map((p, i) => (
