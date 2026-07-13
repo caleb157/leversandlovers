@@ -251,7 +251,7 @@ export default function AdminPage() {
                     }
                   />
 
-                  <label className="lbl">Options (label · intensity 0–4)</label>
+                  <label className="lbl">Options (label · intensity 0–5)</label>
                   {l.options.map((o, i) => (
                     <div className="adm-opt" key={i}>
                       <input
@@ -266,13 +266,13 @@ export default function AdminPage() {
                         className="text adm-int"
                         type="number"
                         min={0}
-                        max={4}
+                        max={5}
                         value={o.intensity}
                         onChange={(e) =>
                           updateOption(l.id, i, {
                             intensity: Math.max(
                               0,
-                              Math.min(4, Number(e.target.value))
+                              Math.min(5, Number(e.target.value))
                             ),
                           })
                         }

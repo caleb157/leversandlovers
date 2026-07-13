@@ -1,6 +1,6 @@
 // The Levers of B4T — data model
 // weight: 1 (barely matters) – 5 (dominant). All seeded at 3 pending tuning.
-// Each option maps to an intensity score 0 (low) – 4 (high).
+// Each option maps to an intensity score 0 (low) – 5 (high).
 
 export type Category =
   | "Environmental"
@@ -10,7 +10,7 @@ export type Category =
 
 export interface Option {
   label: string;
-  intensity: number; // 0–4
+  intensity: number; // 0–5
 }
 
 export interface Lever {
@@ -27,19 +27,6 @@ export interface Lever {
 type BaseLever = Omit<Lever, "name" | "description" | "prosCons">;
 type LeverMeta = Pick<Lever, "name" | "description" | "prosCons">;
 
-const yn = (yesLow: boolean, hi = 3): Option[] =>
-  yesLow
-    ? [
-        { label: "Yes", intensity: 0 },
-        { label: "Somewhat / partially", intensity: 2 },
-        { label: "No", intensity: hi },
-      ]
-    : [
-        { label: "Yes", intensity: hi },
-        { label: "Somewhat / partially", intensity: 2 },
-        { label: "No", intensity: 0 },
-      ];
-
 const BASE: BaseLever[] = [
   // ─────────────── ENVIRONMENTAL (the base layer / context score) ───────────────
   {
@@ -48,7 +35,13 @@ const BASE: BaseLever[] = [
     question:
       "Do other expats live within reasonable distance for frequent personal contact?",
     weight: 3,
-    options: yn(true),
+    options: [
+      { label: "Yes — several within easy reach", intensity: 0 },
+      { label: "A few, seen fairly often", intensity: 1 },
+      { label: "Some, but contact takes planning", intensity: 3 },
+      { label: "Very few — occasional contact at best", intensity: 4 },
+      { label: "None — we are entirely alone", intensity: 5 },
+    ],
   },
   {
     id: "lived-in-city",
@@ -58,8 +51,9 @@ const BASE: BaseLever[] = [
     options: [
       { label: "Yes, 2+ years", intensity: 0 },
       { label: "Yes, under 2 years", intensity: 1 },
-      { label: "Visited only", intensity: 3 },
-      { label: "Never been", intensity: 4 },
+      { label: "Extended stays, never lived there", intensity: 3 },
+      { label: "Visited briefly", intensity: 4 },
+      { label: "Never been", intensity: 5 },
     ],
   },
   {
@@ -67,7 +61,13 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question: "Have other foreigners lived there before you?",
     weight: 2,
-    options: yn(true),
+    options: [
+      { label: "Yes — an established foreign presence", intensity: 0 },
+      { label: "A handful live here now", intensity: 1 },
+      { label: "One or two, some years ago", intensity: 3 },
+      { label: "Passing foreigners only, never residents", intensity: 4 },
+      { label: "We would be the first", intensity: 5 },
+    ],
   },
   {
     id: "language-need",
@@ -77,9 +77,10 @@ const BASE: BaseLever[] = [
     weight: 4,
     options: [
       { label: "Almost none — English or translators suffice", intensity: 0 },
-      { label: "Conversational", intensity: 2 },
-      { label: "Professional working fluency", intensity: 3 },
-      { label: "Native-level nuance (sales, negotiation, trust)", intensity: 4 },
+      { label: "Basic conversational", intensity: 1 },
+      { label: "Solid conversational for daily operations", intensity: 3 },
+      { label: "Professional working fluency", intensity: 4 },
+      { label: "Native-level nuance (sales, negotiation, trust)", intensity: 5 },
     ],
   },
   {
@@ -88,14 +89,26 @@ const BASE: BaseLever[] = [
     question:
       "Does the legal system in your country and city carry a lot of bureaucracy?",
     weight: 3,
-    options: yn(false),
+    options: [
+      { label: "No — light and predictable", intensity: 0 },
+      { label: "Some paperwork, manageable", intensity: 1 },
+      { label: "Real bureaucracy — slow but navigable", intensity: 3 },
+      { label: "Heavy — permits and stamps dominate timelines", intensity: 4 },
+      { label: "Crushing — arbitrary, opaque, and constant", intensity: 5 },
+    ],
   },
   {
     id: "taxes",
     category: "Environmental",
     question: "Are taxes punitive for businesses in your context?",
     weight: 2,
-    options: yn(false),
+    options: [
+      { label: "No — reasonable and predictable", intensity: 0 },
+      { label: "Noticeable but fair", intensity: 1 },
+      { label: "Heavy enough to shape decisions", intensity: 3 },
+      { label: "Punitive — formal businesses struggle", intensity: 4 },
+      { label: "Confiscatory — pushes everyone informal", intensity: 5 },
+    ],
   },
   {
     id: "ecosystem",
@@ -103,7 +116,13 @@ const BASE: BaseLever[] = [
     question:
       "Is there a good business ecosystem in your location for your industry?",
     weight: 3,
-    options: yn(true),
+    options: [
+      { label: "Yes — strong ecosystem for my industry", intensity: 0 },
+      { label: "Decent — most of what we need exists", intensity: 1 },
+      { label: "Thin — key pieces missing", intensity: 3 },
+      { label: "Weak — we import or build most things", intensity: 4 },
+      { label: "None — we'd be building the ecosystem itself", intensity: 5 },
+    ],
   },
   {
     id: "business-culture",
@@ -111,7 +130,13 @@ const BASE: BaseLever[] = [
     question:
       "Does the culture in the city you work in support good business practices such as punctuality, hard work, honesty, and trust?",
     weight: 2,
-    options: yn(true),
+    options: [
+      { label: "Yes — punctuality, honesty, and trust are the norm", intensity: 0 },
+      { label: "Mostly — occasional friction", intensity: 1 },
+      { label: "Mixed — depends heavily on the person", intensity: 3 },
+      { label: "Weak — verification needed on everything", intensity: 4 },
+      { label: "No — unreliability is the operating norm", intensity: 5 },
+    ],
   },
   {
     id: "proven-locally",
@@ -122,8 +147,9 @@ const BASE: BaseLever[] = [
     options: [
       { label: "Yes, expats run it successfully here", intensity: 0 },
       { label: "Locals run it successfully here", intensity: 1 },
-      { label: "Works elsewhere, unproven here", intensity: 3 },
-      { label: "Unproven anywhere", intensity: 4 },
+      { label: "Proven in similar cities nearby", intensity: 3 },
+      { label: "Works elsewhere, unproven here", intensity: 4 },
+      { label: "Unproven anywhere", intensity: 5 },
     ],
   },
   {
@@ -134,8 +160,10 @@ const BASE: BaseLever[] = [
     weight: 1,
     options: [
       { label: "No — they're where we naturally live and operate", intensity: 0 },
-      { label: "Somewhat — a commute or a less convenient district", intensity: 2 },
-      { label: "Yes — far from home, unusual for our industry, or a hard place to be", intensity: 4 },
+      { label: "Slightly — minor inconvenience", intensity: 1 },
+      { label: "Somewhat — a commute or a less convenient district", intensity: 3 },
+      { label: "Significantly — far from home or industry norms", intensity: 4 },
+      { label: "Completely — a hard place, far from everything", intensity: 5 },
     ],
   },
   {
@@ -146,9 +174,10 @@ const BASE: BaseLever[] = [
     weight: 2,
     options: [
       { label: "Open society, low scrutiny", intensity: 0 },
-      { label: "Watched but tolerated", intensity: 2 },
-      { label: "Active monitoring, informants plausible", intensity: 3 },
-      { label: "Hostile state security environment", intensity: 4 },
+      { label: "Occasional attention to foreigners", intensity: 1 },
+      { label: "Watched but tolerated", intensity: 3 },
+      { label: "Active monitoring, informants plausible", intensity: 4 },
+      { label: "Hostile state security environment", intensity: 5 },
     ],
   },
   {
@@ -160,8 +189,9 @@ const BASE: BaseLever[] = [
     options: [
       { label: "Frictionless", intensity: 0 },
       { label: "Manageable paperwork", intensity: 1 },
-      { label: "Heavy controls / informal economy norms", intensity: 3 },
-      { label: "Severe capital controls or sanctions", intensity: 4 },
+      { label: "Slow and costly but workable", intensity: 3 },
+      { label: "Heavy controls / informal economy norms", intensity: 4 },
+      { label: "Severe capital controls or sanctions", intensity: 5 },
     ],
   },
   {
@@ -173,8 +203,9 @@ const BASE: BaseLever[] = [
     options: [
       { label: "Fully reliable", intensity: 0 },
       { label: "Occasional outages, easy redundancy", intensity: 1 },
-      { label: "Frequent disruption, redundancy required", intensity: 3 },
-      { label: "Chronically unreliable", intensity: 4 },
+      { label: "Regular disruption — redundancy required", intensity: 3 },
+      { label: "Frequent failures — productivity often halved", intensity: 4 },
+      { label: "Chronically unreliable", intensity: 5 },
     ],
   },
   {
@@ -185,9 +216,10 @@ const BASE: BaseLever[] = [
     weight: 4,
     options: [
       { label: "Family thrives here / not applicable", intensity: 0 },
-      { label: "Workable with effort", intensity: 2 },
-      { label: "Significant ongoing strain", intensity: 3 },
-      { label: "Family is at breaking point", intensity: 4 },
+      { label: "Good fit with minor compromises", intensity: 1 },
+      { label: "Workable with real, ongoing effort", intensity: 3 },
+      { label: "Significant ongoing strain", intensity: 4 },
+      { label: "Family is at breaking point", intensity: 5 },
     ],
   },
   {
@@ -198,8 +230,9 @@ const BASE: BaseLever[] = [
     options: [
       { label: "Long-term secure status", intensity: 0 },
       { label: "Renewable with confidence", intensity: 1 },
-      { label: "Renewable with uncertainty", intensity: 3 },
-      { label: "Precarious / frequently denied class", intensity: 4 },
+      { label: "Renewable with some uncertainty", intensity: 3 },
+      { label: "Uncertain every cycle", intensity: 4 },
+      { label: "Precarious / frequently denied class", intensity: 5 },
     ],
   },
 
@@ -209,35 +242,65 @@ const BASE: BaseLever[] = [
     category: "Personal",
     question: "Have you founded a business before?",
     weight: 2,
-    options: yn(true),
+    options: [
+      { label: "Yes, more than once", intensity: 0 },
+      { label: "Yes, once", intensity: 1 },
+      { label: "No, but I've been close to a founding team", intensity: 3 },
+      { label: "No — some management experience only", intensity: 4 },
+      { label: "No — completely new to business", intensity: 5 },
+    ],
   },
   {
     id: "sales-experience",
     category: "Personal",
     question: "Have you done sales before?",
     weight: 3,
-    options: yn(true),
+    options: [
+      { label: "Yes — professional sales background", intensity: 0 },
+      { label: "Yes — regular selling in past roles", intensity: 1 },
+      { label: "Some — customer-facing but not selling", intensity: 3 },
+      { label: "Very little", intensity: 4 },
+      { label: "None", intensity: 5 },
+    ],
   },
   {
     id: "industry-experience",
     category: "Personal",
     question: "Have you worked in your industry before?",
     weight: 3,
-    options: yn(true),
+    options: [
+      { label: "Yes — years in this exact industry", intensity: 0 },
+      { label: "Yes — an adjacent industry", intensity: 1 },
+      { label: "Some exposure, never worked in it", intensity: 3 },
+      { label: "Hobby-level familiarity", intensity: 4 },
+      { label: "None", intensity: 5 },
+    ],
   },
   {
     id: "coach",
     category: "Personal",
     question: "Do you have a coach?",
     weight: 3,
-    options: yn(true, 2),
+    options: [
+      { label: "Yes — regular rhythm with an experienced coach", intensity: 0 },
+      { label: "Yes, but irregular", intensity: 1 },
+      { label: "Informal mentors only", intensity: 3 },
+      { label: "Looking, none yet", intensity: 4 },
+      { label: "No coach and no plan for one", intensity: 5 },
+    ],
   },
   {
     id: "advisors",
     category: "Personal",
     question: "Do you have advisors who know your specific industry?",
     weight: 3,
-    options: yn(true, 2),
+    options: [
+      { label: "Yes — several who know my industry well", intensity: 0 },
+      { label: "One or two solid advisors", intensity: 1 },
+      { label: "General business advisors only", intensity: 3 },
+      { label: "Occasional ad-hoc advice", intensity: 4 },
+      { label: "No advisors at all", intensity: 5 },
+    ],
   },
   {
     id: "skill-model-match",
@@ -247,9 +310,10 @@ const BASE: BaseLever[] = [
     weight: 3,
     options: [
       { label: "Direct match — the bottleneck is my strength", intensity: 0 },
-      { label: "Adjacent — I can grow into it", intensity: 2 },
-      { label: "Mismatch — I'll depend on hiring it", intensity: 3 },
-      { label: "Mismatch and no plan to cover it", intensity: 4 },
+      { label: "Strong overlap", intensity: 1 },
+      { label: "Adjacent — I can grow into it", intensity: 3 },
+      { label: "Mismatch — I'll depend on hiring it", intensity: 4 },
+      { label: "Mismatch and no plan to cover it", intensity: 5 },
     ],
   },
   {
@@ -259,9 +323,11 @@ const BASE: BaseLever[] = [
       "Do you intend to work fewer hours in the business than a normal employee would (under ~30 hours/week)?",
     weight: 3,
     options: [
-      { label: "No — full working hours or more", intensity: 0 },
+      { label: "Full working hours or more", intensity: 0 },
       { label: "Roughly normal hours", intensity: 1 },
-      { label: "Yes, under 30 hours", intensity: 3 },
+      { label: "Slightly reduced (30–35 hours)", intensity: 3 },
+      { label: "Under 30 hours", intensity: 4 },
+      { label: "Well under 20 hours", intensity: 5 },
     ],
   },
   {
@@ -271,9 +337,10 @@ const BASE: BaseLever[] = [
     weight: 3,
     options: [
       { label: "7+ years", intensity: 0 },
-      { label: "4–6 years", intensity: 1 },
-      { label: "2–3 years", intensity: 3 },
-      { label: "Under 2 years", intensity: 4 },
+      { label: "5–6 years", intensity: 1 },
+      { label: "3–4 years", intensity: 3 },
+      { label: "Around 2 years", intensity: 4 },
+      { label: "Under 2 years", intensity: 5 },
     ],
   },
   {
@@ -282,9 +349,11 @@ const BASE: BaseLever[] = [
     question: "Do you intend to draw a paycheck from this business within 5 years?",
     weight: 3,
     options: [
-      { label: "No — funded another way", intensity: 1 },
-      { label: "Yes, partial income", intensity: 1 },
-      { label: "Yes — it must fully support us", intensity: 3 },
+      { label: "No — funded another way indefinitely", intensity: 1 },
+      { label: "Yes, partial income eventually", intensity: 2 },
+      { label: "Yes — meaningful income within 5 years", intensity: 3 },
+      { label: "Yes — full support within 5 years", intensity: 4 },
+      { label: "It must fully support us within 2–3 years", intensity: 5 },
     ],
   },
 
@@ -297,8 +366,9 @@ const BASE: BaseLever[] = [
     options: [
       { label: "Fully capitalized with buffer", intensity: 0 },
       { label: "Enough to reach revenue", intensity: 1 },
-      { label: "Undercapitalized — tight runway", intensity: 3 },
-      { label: "Severely undercapitalized", intensity: 4 },
+      { label: "Tight — will demand discipline", intensity: 3 },
+      { label: "Undercapitalized — thin runway", intensity: 4 },
+      { label: "Severely undercapitalized", intensity: 5 },
     ],
   },
   {
@@ -307,8 +377,11 @@ const BASE: BaseLever[] = [
     question: "Do you have a founding partner? (Assume alignment.)",
     weight: 4,
     options: [
-      { label: "Yes", intensity: 0 },
-      { label: "No — solo founder", intensity: 3 },
+      { label: "Yes — a full partner with complementary skills", intensity: 0 },
+      { label: "Yes — a part-time or limited partner", intensity: 1 },
+      { label: "No, but a strong support circle", intensity: 3 },
+      { label: "No — solo with occasional help", intensity: 4 },
+      { label: "No — completely solo", intensity: 5 },
     ],
   },
   {
@@ -317,7 +390,13 @@ const BASE: BaseLever[] = [
     question:
       "Do you already have a large customer for your business who is not a family member? Or do you have a \"fishing hole\" at your disposal of hungry first fans — a set of customers or a network already primed and waiting to buy?",
     weight: 3,
-    options: yn(true),
+    options: [
+      { label: "Yes — a committed large customer", intensity: 0 },
+      { label: "A primed network / fishing hole of first fans", intensity: 1 },
+      { label: "Warm leads, nothing committed", intensity: 3 },
+      { label: "A few contacts only", intensity: 4 },
+      { label: "No — starting completely cold", intensity: 5 },
+    ],
   },
   {
     id: "target-customer",
@@ -327,8 +406,10 @@ const BASE: BaseLever[] = [
     weight: 3,
     options: [
       { label: "Yes — I want or need this myself", intensity: 0 },
-      { label: "Partially — I understand it secondhand", intensity: 1 },
-      { label: "No — I'm learning the customer as I go", intensity: 3 },
+      { label: "Close — I've lived next to this need", intensity: 1 },
+      { label: "Partially — I understand it secondhand", intensity: 3 },
+      { label: "Barely — early research only", intensity: 4 },
+      { label: "No — I'm learning the customer as I go", intensity: 5 },
     ],
   },
   {
@@ -338,17 +419,11 @@ const BASE: BaseLever[] = [
       "How is the business's revenue funded? This shapes cash flow and long-term sustainability.",
     weight: 3,
     options: [
-      { label: "No subsidies — directly market-driven", intensity: 3 },
-      {
-        label:
-          "Partly donor-touched — some customers raise donor money to pay for the service, or are non-profits with a similar vision",
-        intensity: 2,
-      },
-      {
-        label:
-          "Donor-subsidized — we directly subsidize the business with donor or outside funds",
-        intensity: 1,
-      },
+      { label: "Fully donor-subsidized operations", intensity: 1 },
+      { label: "Substantial donor support alongside revenue", intensity: 2 },
+      { label: "Some donor-backed customers or aligned non-profits", intensity: 3 },
+      { label: "Mostly market-driven, small donor cushion", intensity: 4 },
+      { label: "No subsidies — directly market-driven", intensity: 5 },
     ],
   },
   {
@@ -357,9 +432,11 @@ const BASE: BaseLever[] = [
     question: "Do you own the business, or is it owned by someone else?",
     weight: 1,
     options: [
-      { label: "I own it — my money and personal guarantee are on the line", intensity: 3 },
-      { label: "Shared with outside owners", intensity: 2 },
       { label: "Owned by someone else — their money, their problems", intensity: 0 },
+      { label: "Minority stake", intensity: 1 },
+      { label: "Shared with outside owners", intensity: 3 },
+      { label: "Majority mine", intensity: 4 },
+      { label: "Fully mine — my money and personal guarantee on the line", intensity: 5 },
     ],
   },
   {
@@ -369,8 +446,10 @@ const BASE: BaseLever[] = [
     weight: 2,
     options: [
       { label: "Franchise or proven playbook", intensity: 0 },
-      { label: "Adaptation of a proven model", intensity: 1 },
-      { label: "Entirely my own idea", intensity: 3 },
+      { label: "Licensed or copied model with support", intensity: 1 },
+      { label: "Adaptation of a proven model", intensity: 3 },
+      { label: "Loosely inspired by existing models", intensity: 4 },
+      { label: "Entirely my own idea", intensity: 5 },
     ],
   },
   {
@@ -381,8 +460,9 @@ const BASE: BaseLever[] = [
     options: [
       { label: "Branding tweak on a known offer", intensity: 0 },
       { label: "Meaningful improvement", intensity: 1 },
-      { label: "Changing the business model", intensity: 3 },
-      { label: "Building a whole new category", intensity: 4 },
+      { label: "New twist on the business model", intensity: 3 },
+      { label: "Substantially new offer", intensity: 4 },
+      { label: "Building a whole new category", intensity: 5 },
     ],
   },
   {
@@ -391,9 +471,11 @@ const BASE: BaseLever[] = [
     question: "What scale are you aiming for?",
     weight: 3,
     options: [
-      { label: "Small, low-profile business", intensity: 1 },
-      { label: "Solid SME (10–50 people)", intensity: 2 },
-      { label: "Large employer (50+)", intensity: 4 },
+      { label: "Micro — just us", intensity: 1 },
+      { label: "Small team (under 10)", intensity: 2 },
+      { label: "Solid SME (10–50)", intensity: 3 },
+      { label: "Large (50–150)", intensity: 4 },
+      { label: "Major employer (150+)", intensity: 5 },
     ],
   },
   {
@@ -402,7 +484,13 @@ const BASE: BaseLever[] = [
     question:
       "Do you understand your supply chain and have good access to it (vendors, service providers)?",
     weight: 2,
-    options: yn(true),
+    options: [
+      { label: "Yes — known suppliers, good access", intensity: 0 },
+      { label: "Mostly known, minor gaps", intensity: 1 },
+      { label: "Partial — key links untested", intensity: 3 },
+      { label: "Weak understanding, patchy access", intensity: 4 },
+      { label: "No real grip on the supply chain", intensity: 5 },
+    ],
   },
   {
     id: "model-complexity",
@@ -412,12 +500,10 @@ const BASE: BaseLever[] = [
     weight: 2,
     options: [
       { label: "Simple — a laptop, a tool or two, easy to explain", intensity: 0 },
-      { label: "Moderate — several vendors, tools, and early hires", intensity: 2 },
-      {
-        label:
-          "Complex — many vendors and programs, complicated fees, or a big team just to launch",
-        intensity: 4,
-      },
+      { label: "Light — a few tools and vendors", intensity: 1 },
+      { label: "Moderate — several vendors, tools, and early hires", intensity: 3 },
+      { label: "Heavy — many vendors and real coordination load", intensity: 4 },
+      { label: "Complex — many programs, complicated fees, a big team to launch", intensity: 5 },
     ],
   },
   {
@@ -429,8 +515,9 @@ const BASE: BaseLever[] = [
     options: [
       { label: "Days (cash business)", intensity: 0 },
       { label: "Weeks", intensity: 1 },
-      { label: "1–3 months", intensity: 3 },
-      { label: "3+ months", intensity: 4 },
+      { label: "1–2 months", intensity: 3 },
+      { label: "2–3 months", intensity: 4 },
+      { label: "3+ months", intensity: 5 },
     ],
   },
   {
@@ -440,9 +527,10 @@ const BASE: BaseLever[] = [
     weight: 2,
     options: [
       { label: "Digital / pure service", intensity: 0 },
-      { label: "Service with physical elements", intensity: 2 },
-      { label: "Physical product", intensity: 3 },
-      { label: "Physical, perishable or heavy/regulated", intensity: 4 },
+      { label: "Mostly service, light physical elements", intensity: 1 },
+      { label: "Service with significant physical elements", intensity: 3 },
+      { label: "Physical product", intensity: 4 },
+      { label: "Physical — perishable, heavy, or regulated", intensity: 5 },
     ],
   },
 
@@ -452,7 +540,13 @@ const BASE: BaseLever[] = [
     category: "Transformational",
     question: "Do you have a team for the transformational side of the work?",
     weight: 5,
-    options: yn(true),
+    options: [
+      { label: "Yes — an established team", intensity: 0 },
+      { label: "One or two committed teammates", intensity: 1 },
+      { label: "Forming — interest but no commitment yet", intensity: 3 },
+      { label: "Hoping to recruit later", intensity: 4 },
+      { label: "No team and no prospects", intensity: 5 },
+    ],
   },
   {
     id: "target-educated",
@@ -461,9 +555,11 @@ const BASE: BaseLever[] = [
       "Is your target people group educated and skilled in the work you're trying to do?",
     weight: 3,
     options: [
-      { label: "Skilled and educated", intensity: 0 },
-      { label: "Trainable with effort", intensity: 2 },
-      { label: "Requires long-term training investment", intensity: 4 },
+      { label: "Skilled and educated in this work", intensity: 0 },
+      { label: "Mostly skilled — light training needed", intensity: 1 },
+      { label: "Trainable with real effort", intensity: 3 },
+      { label: "Major training investment required", intensity: 4 },
+      { label: "We'd be a long-term training institution", intensity: 5 },
     ],
   },
   {
@@ -472,7 +568,13 @@ const BASE: BaseLever[] = [
     question:
       "Are you able to hire and employ mostly people from your target people group?",
     weight: 3,
-    options: yn(true),
+    options: [
+      { label: "Yes — the whole team can come from the target group", intensity: 0 },
+      { label: "Mostly", intensity: 1 },
+      { label: "About half", intensity: 3 },
+      { label: "A minority only", intensity: 4 },
+      { label: "No — barriers make it impractical", intensity: 5 },
+    ],
   },
   {
     id: "locals-likeminded",
@@ -480,7 +582,13 @@ const BASE: BaseLever[] = [
     question:
       "Are there like-minded locals available for sensitive or strategic roles, whom you know or can reach through your network?",
     weight: 3,
-    options: yn(true, 4),
+    options: [
+      { label: "Yes — several, already known to us", intensity: 0 },
+      { label: "A few, reachable through our network", intensity: 1 },
+      { label: "One or two possibilities, untested", intensity: 3 },
+      { label: "None known, but plausible to find", intensity: 4 },
+      { label: "None — and none in reach", intensity: 5 },
+    ],
   },
   {
     id: "giftedness",
@@ -488,7 +596,13 @@ const BASE: BaseLever[] = [
     question:
       "Are you gifted for the kind of transformational work your model and team require?",
     weight: 3,
-    options: yn(true),
+    options: [
+      { label: "Yes — clearly gifted for this work", intensity: 0 },
+      { label: "Mostly — a solid fit", intensity: 1 },
+      { label: "Somewhat — growth required", intensity: 3 },
+      { label: "A weak fit", intensity: 4 },
+      { label: "No — the model needs gifts I don't have", intensity: 5 },
+    ],
   },
   {
     id: "org-alignment",
@@ -496,7 +610,13 @@ const BASE: BaseLever[] = [
     question:
       "Does your organization support your specific type and flavor of work, and are you in line with it?",
     weight: 2,
-    options: yn(true),
+    options: [
+      { label: "Yes — full support and alignment", intensity: 0 },
+      { label: "Supportive with minor friction", intensity: 1 },
+      { label: "Neutral / mixed signals", intensity: 3 },
+      { label: "Skeptical — regular friction", intensity: 4 },
+      { label: "No — misaligned or unsupported", intensity: 5 },
+    ],
   },
   {
     id: "flavor-articulated",
@@ -506,8 +626,10 @@ const BASE: BaseLever[] = [
     weight: 2,
     options: [
       { label: "Clearly articulated and shared", intensity: 0 },
-      { label: "Partially articulated", intensity: 2 },
-      { label: "Still vague", intensity: 3 },
+      { label: "Written down but not fully owned", intensity: 1 },
+      { label: "Partially articulated", intensity: 3 },
+      { label: "Discussed but never pinned down", intensity: 4 },
+      { label: "Still vague", intensity: 5 },
     ],
   },
 
@@ -520,7 +642,9 @@ const BASE: BaseLever[] = [
     options: [
       { label: "Purely utilitarian — good enough is good enough", intensity: 0 },
       { label: "I care about quality but ship pragmatically", intensity: 1 },
-      { label: "I love it — it must be excellent, and I feel every flaw", intensity: 3 },
+      { label: "I hold it to high standards", intensity: 3 },
+      { label: "I love it — flaws genuinely bother me", intensity: 4 },
+      { label: "It must be perfect — I feel every flaw personally", intensity: 5 },
     ],
   },
   {
@@ -530,9 +654,11 @@ const BASE: BaseLever[] = [
       "How much of your business's daily operations — office work, service delivery, product creation — happens in front of local people? Can you work from home or a private office? Do you have access to good coffee?",
     weight: 1,
     options: [
-      { label: "Highly visible — shopfront, factory floor", intensity: 3 },
-      { label: "Partly visible", intensity: 2 },
       { label: "Mostly invisible (export, online, home office)", intensity: 1 },
+      { label: "Occasional public presence", intensity: 2 },
+      { label: "Partly visible", intensity: 3 },
+      { label: "Regularly on stage with customers", intensity: 4 },
+      { label: "Highly visible — shopfront, factory floor", intensity: 5 },
     ],
   },
 ];
