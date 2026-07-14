@@ -74,7 +74,7 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question:
       "How much local language does your specific business model require you to have?",
-    weight: 4,
+    weight: 5,
     options: [
       { label: "Almost none — English or translators suffice", intensity: 0 },
       { label: "Basic conversational", intensity: 1 },
@@ -101,7 +101,7 @@ const BASE: BaseLever[] = [
     id: "taxes",
     category: "Environmental",
     question: "Are taxes punitive for businesses in your context?",
-    weight: 2,
+    weight: 3,
     options: [
       { label: "No — reasonable and predictable", intensity: 0 },
       { label: "Noticeable but fair", intensity: 1 },
@@ -171,7 +171,7 @@ const BASE: BaseLever[] = [
     category: "Environmental",
     question:
       "How intense is political/religious surveillance of foreigners and religious activity in your context?",
-    weight: 2,
+    weight: 3,
     options: [
       { label: "Open society, low scrutiny", intensity: 0 },
       { label: "Occasional attention to foreigners", intensity: 1 },
@@ -226,7 +226,7 @@ const BASE: BaseLever[] = [
     id: "visa",
     category: "Environmental",
     question: "How stable and renewable is your visa pathway?",
-    weight: 2,
+    weight: 3,
     options: [
       { label: "Long-term secure status", intensity: 0 },
       { label: "Renewable with confidence", intensity: 1 },
@@ -241,7 +241,7 @@ const BASE: BaseLever[] = [
     id: "founded-before",
     category: "Personal",
     question: "Have you founded a business before?",
-    weight: 2,
+    weight: 4,
     options: [
       { label: "Yes, more than once", intensity: 0 },
       { label: "Yes, once", intensity: 1 },
@@ -254,7 +254,7 @@ const BASE: BaseLever[] = [
     id: "sales-experience",
     category: "Personal",
     question: "Have you done sales before?",
-    weight: 3,
+    weight: 4,
     options: [
       { label: "Yes — professional sales background", intensity: 0 },
       { label: "Yes — regular selling in past roles", intensity: 1 },
@@ -293,7 +293,7 @@ const BASE: BaseLever[] = [
     id: "advisors",
     category: "Personal",
     question: "Do you have advisors who know your specific industry?",
-    weight: 3,
+    weight: 2,
     options: [
       { label: "Yes — several who know my industry well", intensity: 0 },
       { label: "One or two solid advisors", intensity: 1 },
@@ -307,7 +307,7 @@ const BASE: BaseLever[] = [
     category: "Personal",
     question:
       "Does the bottleneck function of your business model (sales, operations, craft, finance) match your strongest gifting?",
-    weight: 3,
+    weight: 4,
     options: [
       { label: "Direct match — the bottleneck is my strength", intensity: 0 },
       { label: "Strong overlap", intensity: 1 },
@@ -320,14 +320,14 @@ const BASE: BaseLever[] = [
     id: "hours-desired",
     category: "Personal",
     question:
-      "Do you intend to work fewer hours in the business than a normal employee would (under ~30 hours/week)?",
+      "Are you able to run this business on fewer hours than a normal employee would give (under ~30 hours/week, leaving room for other goals), or does it demand the same or even more than everyone else?",
     weight: 3,
     options: [
-      { label: "Full working hours or more", intensity: 0 },
-      { label: "Roughly normal hours", intensity: 1 },
-      { label: "Slightly reduced (30–35 hours)", intensity: 3 },
-      { label: "Under 30 hours", intensity: 4 },
-      { label: "Well under 20 hours", intensity: 5 },
+      { label: "Yes — it runs well on under ~20 hours a week", intensity: 0 },
+      { label: "Yes — under 30 hours works", intensity: 1 },
+      { label: "It needs roughly normal full-time hours", intensity: 3 },
+      { label: "It demands more than a normal job", intensity: 4 },
+      { label: "It consumes every hour I have, and more", intensity: 5 },
     ],
   },
   {
@@ -388,8 +388,8 @@ const BASE: BaseLever[] = [
     id: "known-customer",
     category: "Business",
     question:
-      "Do you already have a large customer for your business who is not a family member? Or do you have a \"fishing hole\" at your disposal of hungry first fans — a set of customers or a network already primed and waiting to buy?",
-    weight: 3,
+      "Do you already have a large customer for your business who is not a family member? Or do you have a \"fishing hole\" at your disposal of hungry first fans?",
+    weight: 4,
     options: [
       { label: "Yes — a committed large customer", intensity: 0 },
       { label: "A primed network / fishing hole of first fans", intensity: 1 },
@@ -538,8 +538,9 @@ const BASE: BaseLever[] = [
   {
     id: "team",
     category: "Transformational",
-    question: "Do you have a team for the transformational side of the work?",
-    weight: 5,
+    question:
+      "Do you have a gifted team for the transformational side of the work who is not as burdened by the business itself? This could include non-founder employees.",
+    weight: 4,
     options: [
       { label: "Yes — an established team", intensity: 0 },
       { label: "One or two committed teammates", intensity: 1 },
@@ -1031,19 +1032,19 @@ const META: Record<string, LeverMeta> = {
     },
   },
   "hours-desired": {
-    name: "Hours committed",
+    name: "Hours demanded",
     description:
-      "Measures the gap between the hours the business needs and the hours you intend to give it. Founders who plan under 30 hours a week — often to protect ministry time — are asking the business to grow on part-time fuel.",
+      "Measures whether the business can genuinely run on fewer founder hours — leaving room for language, family, and ministry — or whether it demands as much or more than a normal job. The more hours the model requires, the less of everything else you came to do.",
     prosCons: {
       up: [
-        "The business is asked to grow on part-time founder fuel",
-        "Ambition and available hours pull in opposite directions",
-        "Locals notice when the boss treats the business as a side project",
+        "The business consumes every working hour, and asks for more",
+        "You feel the pressure to execute quickly, at everything else's expense",
+        "Language, family, and ministry live on leftovers",
       ],
       down: [
-        "The business gets the full working hours a real venture requires",
-        "Growth expectations and founder input actually match",
-        "Commitment is visible to staff, customers, and officials",
+        "The model genuinely runs on reduced founder hours",
+        "Time exists for the other goals you came for",
+        "The pace is sustainable over a 10-year horizon",
       ],
     },
   },
