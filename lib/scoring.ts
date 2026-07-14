@@ -18,7 +18,8 @@ export interface Result {
 // Verdict = intensity rating, 1 (calm) – 5 (most intense).
 // Superlinear weight curve: heavy levers punch harder than their label,
 // growing faster than linear but well short of exponential (2,4,8,16…).
-const WEIGHT_CURVE: Record<number, number> = { 1: 1, 2: 2, 3: 4, 4: 7, 5: 11 };
+// Floor raised so even a weight-1 lever moves the needle ~1 point when maxed.
+const WEIGHT_CURVE: Record<number, number> = { 1: 2, 2: 3, 3: 4, 4: 7, 5: 11 };
 const effWeight = (w: number) => WEIGHT_CURVE[w] ?? w;
 
 const VERDICT_LABELS: Record<number, string> = {
