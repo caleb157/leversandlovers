@@ -647,20 +647,6 @@ const BASE: BaseLever[] = [
       { label: "It must be perfect — I feel every flaw personally", intensity: 5 },
     ],
   },
-  {
-    id: "visibility",
-    category: "Transformational",
-    question:
-      "How much of your business's daily operations — office work, service delivery, product creation — happens in front of local people? Can you work from home or a private office? Do you have access to good coffee?",
-    weight: 1,
-    options: [
-      { label: "Mostly invisible (export, online, home office)", intensity: 1 },
-      { label: "Occasional public presence", intensity: 2 },
-      { label: "Partly visible", intensity: 3 },
-      { label: "Regularly on stage with customers", intensity: 4 },
-      { label: "Highly visible — shopfront, factory floor", intensity: 5 },
-    ],
-  },
 ];
 
 const META: Record<string, LeverMeta> = {
@@ -919,6 +905,24 @@ const META: Record<string, LeverMeta> = {
         "Legal status is measured in years, not renewal cycles",
         "Plans can honestly assume you'll still be here",
         "Staff and partners commit because you're clearly staying",
+      ],
+    },
+  },
+
+  "locals-likeminded": {
+    name: "Like-minded locals",
+    description:
+      "Measures whether like-minded locals exist in your context — and are reachable through your network — for sensitive or strategic roles. This is a condition of the place more than a choice: without them, the most delicate parts of the work stay founder-dependent, capped at your capacity and your visa.",
+    prosCons: {
+      up: [
+        "No like-minded locals exist yet, or none you can reach",
+        "Every sensitive role rests on the founder indefinitely",
+        "The work's continuity is tied entirely to your presence",
+      ],
+      down: [
+        "Trusted locals are available for sensitive and strategic roles",
+        "A local partner reads situations you would always misread",
+        "The work can survive your departure",
       ],
     },
   },
@@ -1419,23 +1423,6 @@ const META: Record<string, LeverMeta> = {
         "The team shares language for what the work is and isn't",
         "Decisions get made fast against a clear philosophy",
         "Mission success can actually be evaluated against a stated target",
-      ],
-    },
-  },
-  visibility: {
-    name: "Local visibility",
-    description:
-      "Measures how much of your business's daily operations — office work, service delivery, product creation — happens in front of local people, versus from a home office with decent coffee. Visible daily work makes you legible to the community; it also puts you on stage all day, every day.",
-    prosCons: {
-      up: [
-        "The workday happens on stage — shopfront, factory floor, public counter",
-        "Every interaction is cross-cultural and observed",
-        "There's no private office to retreat to between demands",
-      ],
-      down: [
-        "Work happens from home or a private office, on your own terms",
-        "Energy is spent on the work itself, not on being watched",
-        "Good coffee is within reach",
       ],
     },
   },

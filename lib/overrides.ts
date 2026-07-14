@@ -22,11 +22,47 @@ export type Overrides = Record<string, LeverOverride>;
 
 const KEY = "b4t-overrides";
 
+// Drop any stored fields whose shape no longer matches the current data
+// model (e.g. edits saved before an options rescale) instead of crashing.
+function sanitize(raw: unknown): Overrides {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return {};
+  const clean: Overrides = {};
+  for (const [id, v] of Object.entries(raw as Record<string, unknown>)) {
+    const base = LEVERS.find((l) => l.id === id);
+    if (!base || !v || typeof v !== "object" || Array.isArray(v)) continue;
+    const o = v as Record<string, unknown>;
+    const entry: LeverOverride = {};
+    if (typeof o.name === "string") entry.name = o.name;
+    if (typeof o.question === "string") entry.question = o.question;
+    if (typeof o.description === "string") entry.description = o.description;
+    if (
+      typeof o.weight === "number" &&
+      Number.isInteger(o.weight) &&
+      o.weight >= 1 &&
+      o.weight <= 5
+    )
+      entry.weight = o.weight as LeverOverride["weight"];
+    if (
+      Array.isArray(o.options) &&
+      o.options.length === base.options.length &&
+      o.options.every(
+        (x) => x && typeof x === "object" && !Array.isArray(x)
+      )
+    )
+      entry.options = o.options as OptionOverride[];
+    if (Array.isArray(o.up) && o.up.every((s) => typeof s === "string"))
+      entry.up = o.up as string[];
+    if (Array.isArray(o.down) && o.down.every((s) => typeof s === "string"))
+      entry.down = o.down as string[];
+    if (Object.keys(entry).length) clean[id] = entry;
+  }
+  return clean;
+}
+
 export function loadOverrides(): Overrides {
   if (typeof window === "undefined") return {};
   try {
-    const raw = JSON.parse(localStorage.getItem(KEY) ?? "{}");
-    return raw && typeof raw === "object" ? raw : {};
+    return sanitize(JSON.parse(localStorage.getItem(KEY) ?? "{}"));
   } catch {
     return {};
   }

@@ -64,6 +64,7 @@ export function score(answers: Answers, levers: Lever[] = LEVERS): Result {
     const idx = answers[lever.id];
     if (idx === undefined) continue;
     const opt = lever.options[idx];
+    if (!opt) continue; // stale stored answer from an older option set
     const maxI = Math.max(...lever.options.map((o) => o.intensity));
 
     addWeighted += opt.intensity * lever.weight;
