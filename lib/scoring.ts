@@ -16,6 +16,11 @@ export interface Result {
 }
 
 // Verdict = intensity rating, 1 (calm) – 5 (most intense).
+// Superlinear weight curve: heavy levers punch harder than their label,
+// growing faster than linear but well short of exponential (2,4,8,16…).
+const WEIGHT_CURVE: Record<number, number> = { 1: 1, 2: 2, 3: 4, 4: 7, 5: 11 };
+const effWeight = (w: number) => WEIGHT_CURVE[w] ?? w;
+
 const VERDICT_LABELS: Record<number, string> = {
   1: "Green — the lever combination is well within sustainable capacity. Build.",
   2: "Favorable — intensity is real but bounded. Build, and watch your flagged levers.",
@@ -67,11 +72,11 @@ export function score(answers: Answers, levers: Lever[] = LEVERS): Result {
     if (!opt) continue; // stale stored answer from an older option set
     const maxI = Math.max(...lever.options.map((o) => o.intensity));
 
-    addWeighted += opt.intensity * lever.weight;
-    addMax += maxI * lever.weight;
+    addWeighted += opt.intensity * effWeight(lever.weight);
+    addMax += maxI * effWeight(lever.weight);
     catWeighted[lever.category] =
-      (catWeighted[lever.category] ?? 0) + opt.intensity * lever.weight;
-    catMax[lever.category] = (catMax[lever.category] ?? 0) + maxI * lever.weight;
+      (catWeighted[lever.category] ?? 0) + opt.intensity * effWeight(lever.weight);
+    catMax[lever.category] = (catMax[lever.category] ?? 0) + maxI * effWeight(lever.weight);
 
     if (lever.weight >= 4 && opt.intensity >= 3) flags.push(lever.name);
   }
@@ -96,11 +101,11 @@ export function scoreFromManual(
     const maxI = Math.max(...lever.options.map((o) => o.intensity));
     const intensity = ((v - 1) / 4) * maxI;
 
-    addWeighted += intensity * lever.weight;
-    addMax += maxI * lever.weight;
+    addWeighted += intensity * effWeight(lever.weight);
+    addMax += maxI * effWeight(lever.weight);
     catWeighted[lever.category] =
-      (catWeighted[lever.category] ?? 0) + intensity * lever.weight;
-    catMax[lever.category] = (catMax[lever.category] ?? 0) + maxI * lever.weight;
+      (catWeighted[lever.category] ?? 0) + intensity * effWeight(lever.weight);
+    catMax[lever.category] = (catMax[lever.category] ?? 0) + maxI * effWeight(lever.weight);
 
     if (lever.weight >= 4 && intensity >= 3) flags.push(lever.name);
   }
